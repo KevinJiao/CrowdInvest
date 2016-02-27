@@ -1,37 +1,91 @@
-{% extends "layout.html" %}
+<!DOCTYPE html>
+<style>
 
-{% block content %}
+body {
+  font: 10px sans-serif;
+}
 
-<div class="jumbotron">
-    <h1>Flask</h1>
-    <p class="lead">Flask is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://flask.pocoo.org/" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
-</div>
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            Flask gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://flask.pocoo.org/docs/">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>The Python Package Index is a repository of software for the Python programming language.</p>
-        <p><a class="btn btn-default" href="https://pypi.python.org/pypi">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Python Tools for Visual Studio</h2>
-        <p>
-            PTVS is a free, open source plugin that turns Visual Studio into a Python IDE
-            with support for editing, browsing, IntelliSense, Azure remote debugging,
-            profiling and more.
-        </p>
-        <p><a class="btn btn-default" href="http://pytools.codeplex.com">Learn more &raquo;</a></p>
-    </div>
-</div>
+.x.axis path {
+  display: none;
+}
 
-{% endblock %}
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+p {
+    border: 1px solid black;
+}
+
+</style>
+
+<body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="/static/scripts/Visualization.js"></script>
+
+<div style="position: absolute; top:20px; left:900px; width:200px; height:50px; font: 26px sans-serif">Top 10 holdings:</div>
+<table style="position: absolute; top:60px; left:930px; width:200px; height:400px; font: 20px sans-serif">
+  <tr>
+    <td id="tick0"></td>
+    <td id="hold0"></td>
+    <td id="change0"></td>
+  </tr>
+  <tr>
+    <td id="tick1"></td>
+    <td id="hold1"></td>
+    <td id="change1"></td>
+  </tr>
+  <tr>
+    <td id="tick2"></td>
+    <td id="hold2"></td>
+    <td id="change2"></td>
+  </tr>
+  <tr>
+    <td id="tick3"></td>
+    <td id="hold3"></td>
+    <td id="change3"></td>
+  </tr>
+  <tr>
+    <td id="tick4"></td>
+    <td id="hold4"></td>
+    <td id="change4"></td>
+  </tr>
+  <tr>
+    <td id="tick5"></td>
+    <td id="hold5"></td>
+    <td id="change5"></td>
+  </tr>
+  <tr>
+    <td id="tick6"></td>
+    <td id="hold6"></td>
+    <td id="change6"></td>
+  </tr>
+  <tr>
+    <td id="tick7"></td>
+    <td id="hold7"></td>
+    <td id="change7"></td>
+  </tr>
+  <tr>
+    <td id="tick8"></td>
+    <td id="hold8"></td>
+    <td id="change8"></td>
+  </tr>
+  <tr>
+    <td id="tick9"></td>
+    <td id="hold9"></td>
+    <td id="change9"></td>
+  </tr>
+</table>
+
+
+</body>
