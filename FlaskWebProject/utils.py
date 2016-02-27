@@ -1,6 +1,6 @@
 from datetime import datetime
 import traceback
-import sys
+import math
 import csv
 
 ref = datetime(2016, 2, 27, 11, 39, 32, 684190)
@@ -23,7 +23,8 @@ markets += ['CASH', 'AAPL', 'ABBV', 'ABT', 'ACN', 'AEP', 'AIG', 'ALL',
 
 dataDict = {}
 portfolio = {}
-log = []
+funds = 100**6
+history = [10**6]
 
 for symbol in markets:
     priceData = []
@@ -38,14 +39,9 @@ for symbol in markets:
 def get_quote(symbol):
     if symbol not in dataDict.keys():
         return None
-    try:
-        now = datetime.now()
-        offset = now - ref
-        return float(dataDict[symbol][offset.seconds / 15][1])
-    except:
-        e = sys.exc_info()[0]
-        print e
-        return traceback.format_exc()
+    now = datetime.now()
+    offset = now - ref
+    return float(dataDict[symbol][offset.seconds / 15][1])
 
 
 def order(order, sym, val):
@@ -60,13 +56,13 @@ def buy(symbol, val):
     quote = get_quote(symbol)
     if not quote:
         return
-    try:
-        if symbol not in portfolio:
-            portfolio[symbol] = float(val)/float(quote)
-        else:
-            portfolio[symbol] += float(val)/float(quote)
-    except:
-        print traceback.format_exc()
+    # if val > funds:
+    #    print "insufficient funds"
+    #    return
+    if symbol not in portfolio:
+        portfolio[symbol] = float(val)/float(quote)
+    else:
+        portfolio[symbol] += float(val)/float(quote)
 
 
 def sell(symbol, val):
@@ -86,6 +82,19 @@ def get_portfolio_val():
         for sym in portfolio:
             quote = get_quote(sym)
             val += quote * portfolio[sym]
+
+        val += funds
+        if math.fabs(val - history[0]) > 1e-09:
+            update_history(val)
         return val
+    except:
+        print traceback.format_exc()
+
+
+def update_history(val):
+    try:
+        if len(history) > 100:
+            history.pop()
+        history.insert(0, val)
     except:
         print traceback.format_exc()
