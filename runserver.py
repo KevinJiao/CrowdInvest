@@ -6,7 +6,6 @@ from os import environ
 from FlaskWebProject import app
 from flask import request, redirect
 import twilio.twiml
-import urllib, httplib
 
 if __name__ == '__main__':
     HOST = environ.get('SERVER_HOST', 'localhost')
