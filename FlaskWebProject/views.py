@@ -55,3 +55,16 @@ def history():
 def quote():
     sym = request.args.get('s')
     return jsonify(price=utils.get_quote(sym))
+
+
+@app.route('/order', methods=['POST'])
+def buy():
+    order = request.form['order']
+    sym = request.form['sym']
+    val = request.form['val']
+    # TODO interact with firebase
+
+
+@app.route('/status')
+def status():
+    return "nahh"

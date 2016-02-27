@@ -1,4 +1,5 @@
 from datetime import datetime
+import sys
 import csv
 
 ref = datetime(2016, 2, 27, 3, 7, 17, 966565)
@@ -34,6 +35,10 @@ for symbol in markets:
 def get_quote(symbol):
     if symbol not in dataDict.keys():
         return None
-    now = datetime.now()
-    offset = now - ref
-    return dataDict[symbol][offset.seconds / 15][1]
+    try:
+        now = datetime.now()
+        offset = now - ref
+        return dataDict[symbol][offset.seconds / 15][1]
+    except:
+        e = sys.exc_info()[0]
+        return str(e)
