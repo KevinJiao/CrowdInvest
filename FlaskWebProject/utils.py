@@ -24,7 +24,7 @@ markets += ['CASH', 'AAPL', 'ABBV', 'ABT', 'ACN', 'AEP', 'AIG', 'ALL',
 dataDict = {}
 portfolio = {}
 funds = 100**6
-history = [10**6]
+history = [100**6]
 
 for symbol in markets:
     priceData = []
