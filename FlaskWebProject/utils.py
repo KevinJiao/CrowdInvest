@@ -93,7 +93,7 @@ def get_portfolio_val():
 
 def update_history(val):
     try:
-        if len(history) > 100:
+        if len(history) > 120:
             history.pop()
         history.insert(0, val)
     except:

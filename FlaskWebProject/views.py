@@ -64,11 +64,7 @@ def buy():
     val = request.form['val']
 
     print order, sym, val
-    if order == 'B':
-        utils.buy(sym, val)
-
-    elif order == 'S':
-        utils.sell(sym, val)
+    utils.order(order, sym, val)
     return "ordered"
 
 
