@@ -7,7 +7,7 @@ from flask import render_template
 from flask import jsonify
 from flask import request
 from FlaskWebProject import app
-import utils
+import utils, requests
 now = datetime(2016, 2, 27, 3, 7, 17, 966565)
 
 
@@ -84,3 +84,14 @@ def twilio():
     order, sym, value = body
     utils.order(order, sym, value)
     return "we gucci"
+
+@app.route('/promptio', methods=['POST'])
+def promptio():
+    myJson = request.get_json()
+    body = myJson['message'].split(" ")
+    if len(body) == 3:
+        order, sym, value = body
+        utils.order(order, sym, value)
+        return
+    #consider adding more to this. promptio can give feedback
+    return
