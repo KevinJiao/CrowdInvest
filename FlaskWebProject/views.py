@@ -77,3 +77,10 @@ def status():
     value = utils.get_portfolio_val()
     portfolio = utils.portfolio
     return jsonify(value=value, portfolio=portfolio)
+
+
+@app.route('/twilio', methods=['POST'])
+def twilio():
+    body = request.form['Body']
+    utils.log.append(body)
+    return utils.log

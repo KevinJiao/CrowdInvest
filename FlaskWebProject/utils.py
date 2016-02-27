@@ -23,6 +23,7 @@ markets += ['CASH', 'AAPL', 'ABBV', 'ABT', 'ACN', 'AEP', 'AIG', 'ALL',
 
 dataDict = {}
 portfolio = {}
+log = []
 
 for symbol in markets:
     priceData = []
