@@ -1,4 +1,5 @@
 from datetime import datetime
+import traceback
 import sys
 import csv
 
@@ -41,4 +42,4 @@ def get_quote(symbol):
         return dataDict[symbol][offset.seconds / 15][1]
     except:
         e = sys.exc_info()[0]
-        return str(e)
+        return traceback.format_exc()
