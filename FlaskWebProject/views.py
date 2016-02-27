@@ -62,9 +62,18 @@ def buy():
     order = request.form['order']
     sym = request.form['sym']
     val = request.form['val']
-    # TODO interact with firebase
+
+    print order, sym, val
+    if order == 'B':
+        utils.buy(sym, val)
+
+    elif order == 'S':
+        utils.sell(sym, val)
+    return "ordered"
 
 
 @app.route('/status')
 def status():
-    return "nahh"
+    value = utils.get_portfolio_val()
+    portfolio = utils.portfolio
+    return jsonify(value=value, portfolio=portfolio)

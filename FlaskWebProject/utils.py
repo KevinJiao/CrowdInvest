@@ -22,6 +22,7 @@ markets += ['CASH', 'AAPL', 'ABBV', 'ABT', 'ACN', 'AEP', 'AIG', 'ALL',
             'UPS', 'USB', 'UTX', 'V', 'VZ', 'WAG', 'WFC', 'WMT', 'XOM']
 
 dataDict = {}
+portfolio = {}
 
 for symbol in markets:
     priceData = []
@@ -39,7 +40,43 @@ def get_quote(symbol):
     try:
         now = datetime.now()
         offset = now - ref
-        return dataDict[symbol][offset.seconds / 15][1]
+        return float(dataDict[symbol][offset.seconds / 15][1])
     except:
         e = sys.exc_info()[0]
+        print e
         return traceback.format_exc()
+
+
+def buy(symbol, amount):
+    quote = get_quote(symbol)
+    if not quote:
+        return
+    try:
+        if symbol not in portfolio:
+            portfolio[symbol] = float(amount)/float(quote)
+        else:
+            portfolio[symbol] += float(amount)/float(quote)
+    except:
+        print traceback.format_exc()
+
+
+def sell(symbol, amount):
+    quote = get_quote(symbol)
+    if not quote or symbol not in portfolio:
+        return
+
+    if portfolio[symbol] < float(amount)/quote:
+        portfolio[symbol] = 0
+    else:
+        portfolio[symbol] -= float(amount)/quote
+
+
+def get_portfolio_val():
+    try:
+        val = 0
+        for sym in portfolio:
+            quote = get_quote(sym)
+            val += quote * portfolio[sym]
+        return val
+    except:
+        print traceback.format_exc()
