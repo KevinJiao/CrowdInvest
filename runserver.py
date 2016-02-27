@@ -6,6 +6,7 @@ from os import environ
 from FlaskWebProject import app
 from flask import request, redirect
 import twilio.twiml
+import requests
 
 if __name__ == '__main__':
     HOST = environ.get('SERVER_HOST', 'localhost')
@@ -26,7 +27,9 @@ def inTextOutStock():
     		'sym' : parsedBody[1],
     		'val' : parsedBody[2]
     		}
-        return str(params);
+		r = requests.post("http://crowdinvestor.azurewebsites.net/order", 
+			data = params)
+        return;
     } else {
     	#not valid buy/sell order
     	return;
