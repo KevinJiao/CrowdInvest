@@ -16,7 +16,7 @@ if __name__ == '__main__':
         PORT = 5555
     app.run(HOST, PORT)
  
-@app.route("/order", methods=['GET', 'POST'])
+@app.route("/twilio", methods=['GET', 'POST'])
 def inTextOutStock():
     """Parse incoming texts and send JSON sell/buy order."""
     incomingBody = request.values.get('Body', None)
