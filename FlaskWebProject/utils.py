@@ -48,28 +48,36 @@ def get_quote(symbol):
         return traceback.format_exc()
 
 
-def buy(symbol, amount):
+def order(order, sym, val):
+    if order.lower() in ['b', 'buy']:
+        buy(sym.upper(), val)
+
+    elif order.lower() in ['s', 'sell']:
+        sell(sym.upper(), val)
+
+
+def buy(symbol, val):
     quote = get_quote(symbol)
     if not quote:
         return
     try:
         if symbol not in portfolio:
-            portfolio[symbol] = float(amount)/float(quote)
+            portfolio[symbol] = float(val)/float(quote)
         else:
-            portfolio[symbol] += float(amount)/float(quote)
+            portfolio[symbol] += float(val)/float(quote)
     except:
         print traceback.format_exc()
 
 
-def sell(symbol, amount):
+def sell(symbol, val):
     quote = get_quote(symbol)
     if not quote or symbol not in portfolio:
         return
 
-    if portfolio[symbol] < float(amount)/quote:
+    if portfolio[symbol] < float(val)/quote:
         portfolio[symbol] = 0
     else:
-        portfolio[symbol] -= float(amount)/quote
+        portfolio[symbol] -= float(val)/quote
 
 
 def get_portfolio_val():

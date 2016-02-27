@@ -79,8 +79,11 @@ def status():
     return jsonify(value=value, portfolio=portfolio)
 
 
-@app.route('/twilio', methods=['POST'])
+@app.route('/twilio', methods=['POST', 'GET'])
 def twilio():
-    body = request.form['Body']
-    utils.log.append(body)
-    return utils.log
+    body = request.form['Body'].split(' ')
+    if len(body) != 3:
+        return
+    order, sym, value = body
+    utils.order(order, sym, value)
+    return "we gucci"
