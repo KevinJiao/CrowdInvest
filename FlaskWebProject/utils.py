@@ -95,6 +95,9 @@ def buy(sym, val, g):
         g.db.execute("INSERT OR IGNORE INTO portfolio VALUES (?,?)", ['funds', 10**6])
         funds = g.db.execute("SELECT sym, amount FROM portfolio WHERE sym = ?", ["funds"]).fetchall()[0][1]
         cost = quote * float(val)
+        if cost > funds:
+            print cost, funds
+            return
         print 'quotea: ' + str(quote)
         print 'cost: ' + str(cost)
         g.db.execute("INSERT OR IGNORE INTO portfolio VALUES (?,?)", [sym, 0])
