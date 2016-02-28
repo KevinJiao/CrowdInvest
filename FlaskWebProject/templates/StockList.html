@@ -85,7 +85,14 @@
             'QCOM', 'RTN', 'SBUX', 'SLB', 'SO', 'SPG', 'T', 'TGT', 'TWX', 'TXN', 'UNH', 'UNP',
             'UPS', 'USB', 'UTX', 'V', 'VZ', 'WAG', 'WFC', 'WMT', 'XOM']
 
+var prices = {};
 
+for(j = 0; j < 45; j++)
+  {
+    var link = "http://localhost:5555/quote?s=";
+    link += markets[j];
+    $.getJSON( link, ping);
+  }
 
   
     function loop() {
@@ -104,6 +111,7 @@
     
     function ping(json) {
       
+      prices[json["sym"]] = json["price"];
       document.getElementById(json["sym"]).innerHTML = "$" + json["price"].toFixed(2);
 
       
@@ -112,14 +120,31 @@
     function ping2(json) {
 
       function compare(a, b) {
-        return json["portfolio"][a] *  - json["portfolio"][a]
+        var tempA;
+        var tempB;
+        if (json["portfolio"][a] !== undefined) {
+          tempA = json["portfolio"][a] * prices[a];
+        } else {
+          tempA = 0;  
+        }
+        if (json["portfolio"][b] !== undefined) {
+          tempB = json["portfolio"][b] * prices[b];
+        } else {
+          tempB = 0;  
+        }
+        return tempB - tempA;
+      }
+
+      markets = markets.sort(compare);
+      for (i = 0; i < 45; i++) {
+        document.getElementById(i).innerHTML = markets[i];        
       }
 
       for (j = 0; j < 45; j++) {
         if (json["portfolio"][markets[j]] !== undefined) {
-          document.getElementById("num" + markets[j]).innerHTML = json["portfolio"][markets[j]];        
+          document.getElementById("num" + j).innerHTML = json["portfolio"][markets[j]];        
         } else {
-          document.getElementById("num" + markets[j]).innerHTML = 0;        
+          document.getElementById("num" + j).innerHTML = 0;        
         }
       }
     }
@@ -136,10 +161,10 @@
       var html = '';
       var i;
       for (i = 0; i < 15; i++) { 
-        html += '<button type="button" class="btn btn-primary  btn-outline">'; 
+        html += '<button type="button" class="btn btn-primary  btn-outline" id=' + i + '>'; 
         html += markets[i];
         html += '</button>';
-        html += '<button type="button" class="btn btn-info  btn-outline" id=num' + markets[i] + '>';
+        html += '<button type="button" class="btn btn-info  btn-outline" id=num' + i + '>';
         html += '</button>';
         html += '<button type="button" class="btn btn-default  btn-outline" id =';
         html += markets[i];
@@ -157,10 +182,10 @@
       var html = '';
       var i;
       for (i = 15; i < 30; i++) { 
-        html += '<button type="button" class="btn btn-primary btn-outline">'; 
+        html += '<button type="button" class="btn btn-primary btn-outline" id=' + i + '>'; 
         html += markets[i];
         html += '</button>';
-        html += '<button type="button" class="btn btn-info btn-outline" id=num' + markets[i] + '>';
+        html += '<button type="button" class="btn btn-info btn-outline" id=num' + i + '>';
         html += '</button>';
         html += '<button type="button" class="btn btn-default btn-outline" id = ';
         html += markets[i];
@@ -178,10 +203,10 @@
       var html = '';
       var i;
       for (i = 30; i < 45; i++) { 
-        html += '<button type="button" class="btn btn-primary btn-outline">'; 
+        html += '<button type="button" class="btn btn-primary btn-outline" id=' + i + '>'; 
         html += markets[i];
         html += '</button>';
-        html += '<button type="button" class="btn btn-info btn-outline" id=num' + markets[i] + '>';
+        html += '<button type="button" class="btn btn-info btn-outline" id=num' + i + '>';
         html += '</button>';
         html += '<button type="button" class="btn btn-default btn-outline" id = ';        
         html += markets[i];
