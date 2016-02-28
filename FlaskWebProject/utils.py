@@ -23,8 +23,9 @@ markets += ['CASH', 'AAPL', 'ABBV', 'ABT', 'ACN', 'AEP', 'AIG', 'ALL',
 
 dataDict = {}
 portfolio = {}
-funds = 100**6
-history = [100**6]
+funds = 10**6
+history = [10**6]
+trades = []
 
 for symbol in markets:
     priceData = []
@@ -51,11 +52,17 @@ def order(order, sym, val):
     elif order.lower() in ['s', 'sell']:
         sell(sym.upper(), val)
 
+    global trades
+    if len(trades) > 10:
+        trades.pop()
+    trades.insert(0, str(order) + ' ' + str(sym) + ' ' + str(val))
+
 
 def buy(symbol, val):
     quote = get_quote(symbol)
     if not quote:
         return
+
     # if val > funds:
     #    print "insufficient funds"
     #    return
@@ -63,6 +70,8 @@ def buy(symbol, val):
         portfolio[symbol] = float(val)/float(quote)
     else:
         portfolio[symbol] += float(val)/float(quote)
+    global funds
+    funds -= float(val)
 
 
 def sell(symbol, val):
@@ -83,6 +92,7 @@ def get_portfolio_val():
             quote = get_quote(sym)
             val += quote * portfolio[sym]
 
+        global funds
         val += funds
         if math.fabs(val - history[0]) > 1e-09:
             update_history(val)
