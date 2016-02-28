@@ -9,6 +9,7 @@ from flask import request
 from flask import make_response
 from flask import g
 import traceback
+import twilio.twiml
 from FlaskWebProject import app
 import utils
 import requests
@@ -104,19 +105,23 @@ def status():
 @app.route('/twilio', methods=['POST', 'GET'])
 def twilio():
     body = request.form['Body'].split(' ')
+    resp = twilio.twiml.Response()
+    myText = "unknown command. Please enter: <buy/sell TICKER #OFSHARES> to make a trade."
     if len(body) != 3:
-        return "we not gucci"
+        resp.message(myText)
+        return str(resp)
     order, sym, value = body
+    myText = "Nice! You put in an order to " + order.lower() + " " + value + " shares of " + sym.upper()
+    resp.message(myText)
     utils.order(order, sym, value, g)
-    return "we gucci"
+    return str(resp)
 
 
 @app.route('/promptio', methods=['POST'])
 def promptio():
     myJson = request.get_json()
-    myText = "enter <@stock_00017 status> to check portfolio value. enter <@stock_00017 buy/sell TICKER DOLLAR-AMOUNT> to make a trade."
+    myText = "enter <@stock_00017 status> to check portfolio value. enter <@stock_00017 buy/sell TICKER #OFSHARES> to make a trade."
     body = myJson['message'].split(" ")
-    myText = ""
     if body[0] == "status":
         myText = str(utils.get_portfolio_val(g))
     if len(body) == 3:
