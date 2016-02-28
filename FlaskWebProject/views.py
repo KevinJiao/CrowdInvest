@@ -82,8 +82,8 @@ def buy():
     sym = request.form['sym']
     val = request.form['val']
 
-    utils.order(order, sym, val, g)
-    return "ordered"
+    r = utils.order(order, sym, val, g)
+    return str(r)
 
 
 @app.route('/status')

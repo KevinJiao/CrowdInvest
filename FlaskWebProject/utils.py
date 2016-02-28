@@ -54,8 +54,11 @@ def order(order, sym, val, g):
     else:
         return
 
-    g.db.execute("INSERT INTO orders (trade) VALUES (?)", [str(order) + ' ' + str(sym) + ' ' + str(val)])
-    g.db.commit()
+    try:
+        g.db.execute("INSERT INTO orders (trade) VALUES (?)", [str(order) + ' ' + str(sym) + ' ' + str(val)])
+        g.db.commit()
+    except:
+        return traceback.format_exc()
 
 
 def get_trades(g):
