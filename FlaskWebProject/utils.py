@@ -35,6 +35,22 @@ for symbol in markets:
     dataDict[symbol] = priceData
 
 
+def valid_order(order, sym, val):
+    if order.lower() not in ['b', 'buy', 's', 'sell']:
+        return False
+    if sym.upper() not in markets:
+        return False
+    if isinstance(val, (str, unicode)):
+        if not val.isdigit():
+            print "val is not digit string"
+            return False
+        return True
+    if not isinstance(val, (int, float)):
+        print type(val).__name__
+        return False
+    return True
+
+
 def get_quote(symbol):
     if symbol not in dataDict.keys():
         print symbol
