@@ -49,11 +49,10 @@ function recent() {
 }
 
 function ping(json) {
-
-    if (json["value"] > 1000000) {
-      document.getElementById("total").innerHTML = "$" + json["value"].toFixed(2) + "   <span style='color:green'>(" + String.fromCharCode(9650) + " +" + (json["value"] - 1000000).toFixed(2) + ")</span>";
+    if (json["value"] > json["history"][1]) {
+      document.getElementById("total").innerHTML = "$" + json["value"].toFixed(2) + "   <span style='color:green'>(" + String.fromCharCode(9650) + " +" + (json["value"] - json["history"][1]).toFixed(2) + ")</span>";
     } else {
-      document.getElementById("total").innerHTML = "$" + json["value"].toFixed(2) + "   <span style='color:red'>(" + String.fromCharCode(9662) + " " + (json["value"] - 1000000).toFixed(2) + ")</span>";
+      document.getElementById("total").innerHTML = "$" + json["value"].toFixed(2) + "   <span style='color:red'>(" + String.fromCharCode(9662) + " " + (json["value"] - json["history"][1]).toFixed(2) + ")</span>";
     }
 
     if (data.length == 0) {
@@ -84,7 +83,7 @@ function ping(json) {
     var top = json["top"];
     for (i = 0; i < top.length; i++) {
       document.getElementById("tick" + i).innerHTML = top[i][0];
-      document.getElementById("hold" + i).innerHTML = "$" + top[i][1].toFixed(2);      
+      document.getElementById("hold" + i).innerHTML = "$" + top[i][1].toFixed(2);
     }
 
     x.domain(d3.extent(data, function(d) { return d.date; }));
