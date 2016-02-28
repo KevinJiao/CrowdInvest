@@ -102,12 +102,15 @@ def sell(symbol, val):
 
 
 def get_portfolio(g):
-    rows = g.db.execute("SELECT sym, amount FROM portfolio where sym != ?", ['funds']).fetchall()
-    portfolio = {}
-    for sym, amount in rows:
-        portfolio[sym] = amount
+    try:
+        rows = g.db.execute("SELECT sym, amount FROM portfolio where sym != ?", ['funds']).fetchall()
+        portfolio = {}
+        for sym, amount in rows:
+            portfolio[sym] = amount
 
-    return portfolio
+        return portfolio
+    except:
+        return traceback.format_exc()
 
 
 def get_portfolio_val(g):
