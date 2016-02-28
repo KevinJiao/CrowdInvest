@@ -23,7 +23,6 @@ markets += ['CASH', 'AAPL', 'ABBV', 'ABT', 'ACN', 'AEP', 'AIG', 'ALL',
 
 dataDict = {}
 portfolio = {}
-history = [10**6]
 trades = []
 
 for symbol in markets:
@@ -47,15 +46,15 @@ def get_quote(symbol):
 
 
 def order(order, sym, val, g):
-    if order.lower() in ['b', 'buy']:
-        buy(sym.upper(), val, g)
-
-    elif order.lower() in ['s', 'sell']:
-        sell(sym.upper(), val, g)
-    else:
-        return
-
     try:
+        if order.lower() in ['b', 'buy']:
+            buy(sym.upper(), val, g)
+
+        elif order.lower() in ['s', 'sell']:
+            sell(sym.upper(), val, g)
+        else:
+            return
+
         g.db.execute("INSERT INTO orders (trade) VALUES (?)", [str(order) + ' ' + str(sym) + ' ' + str(val)])
         g.db.commit()
     except:
