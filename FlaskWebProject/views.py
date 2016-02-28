@@ -112,7 +112,7 @@ def promptio():
     body = myJson['message'].split(" ")
     if len(body) == 3:
         order, sym, value = body
-        utils.order(order, sym, value)
+        # utils.order(order, sym, value)
         #insert JSON response here
     return jsonify(sendmms=False, showauthurl=False, authstate=None,
     text="hi", speech="hi", status="OK", webhookreply=None,
