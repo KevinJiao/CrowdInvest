@@ -112,10 +112,10 @@ var owned = {};
     function ping2(json) {
 
       for (j = 0; j < 45; j++) {
-        if (markets[j] in json["portfolio"]) {
-          document.getElementById("num" + markets[j]).innerHTML = "$" + json["portfolio"][markets[j]].toFixed(2);        
+        if (json["portfolio"][markets[j]] !== undefined) {
+          document.getElementById("num" + markets[j]).innerHTML = json["portfolio"][markets[j]];        
         } else {
-          document.getElementById("num" + markets[j]).innerHTML = "$0";        
+          document.getElementById("num" + markets[j]).innerHTML = 0;        
         }
       }
     }
