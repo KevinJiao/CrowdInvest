@@ -73,7 +73,7 @@ def buy(sym, val, g):
     try:
         quote = get_quote(symbol)
         if not quote:
-            return
+            return quote
 
         g.db.execute("INSERT OR IGNORE INTO portfolio VALUES (?,?)", ['funds', 10**6])
         funds = g.db.execute("SELECT sym, amount FROM portfolio WHERE sym = ?", ["funds"]).fetchall()[0][1]
