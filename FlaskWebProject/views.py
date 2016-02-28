@@ -47,7 +47,7 @@ def home():
 def contact():
     """Renders the contact page."""
     return render_template(
-        'contact.html',
+        'StockList.html',
         title='Contact',
         year=datetime.now().year,
         message='Your contact page.'

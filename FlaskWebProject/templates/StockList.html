@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Stock List</title>
+    <!-- Bootstrap -->
+    <link href="/static/content/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+ <style>
+       body {
+    font-family: "Trebuchet MS", Verdana, sans-serif;
+    font-size: 16px;
+    background-color: 	#000000;
+    color: 	#99ccff; 
+    padding: 3px;
+}
+  .btn-outline {
+    background-color: transparent;
+    color: inherit;
+    transition: all .5s;
+}
+
+.btn-primary.btn-outline {
+    color: #428bca;
+}
+
+.btn-success.btn-outline {
+    color: #5cb85c;
+}
+
+.btn-info.btn-outline {
+    color: #5bc0de;
+}
+
+.btn-warning.btn-outline {
+    color: #f0ad4e;
+}
+
+.btn-danger.btn-outline {
+    color: #d9534f;
+}
+
+.btn-primary.btn-outline:hover,
+.btn-success.btn-outline:hover,
+.btn-info.btn-outline:hover,
+.btn-warning.btn-outline:hover,
+.btn-danger.btn-outline:hover {
+    color: #fff;
+}
+</style>
+  <body>
+   
+
+    
+   <br>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/static/scripts/bootstrap.min.js"></script>
+    
+    
+    <script>
+   var markets = ['F_AD', 'F_BO', 'F_BP', 'F_C', 'F_CC', 'F_CD',
+           'F_CL', 'F_CT', 'F_DX', 'F_EC', 'F_ED', 'F_ES', 'F_FC', 'F_FV', 'F_GC',
+           'F_HG', 'F_HO', 'F_JY', 'F_KC', 'F_LB', 'F_LC', 'F_LN', 'F_MD', 'F_MP',
+           'F_NG', 'F_NQ', 'F_NR', 'F_O', 'F_OJ', 'F_PA', 'F_PL', 'F_RB', 'F_RU',
+           'F_S', 'F_SB', 'F_SF', 'F_SI', 'F_SM', 'F_TU', 'F_TY', 'F_US', 'F_W', 'F_XX',
+           'F_YM', 'AAPL', 'ABBV', 'ABT', 'ACN', 'AEP', 'AIG', 'ALL',
+            'AMGN', 'AMZN', 'APA', 'APC', 'AXP', 'BA', 'BAC', 'BAX', 'BK', 'BMY',  'BRKB', 'C',
+            'CAT', 'CL', 'CMCSA', 'COF', 'COP', 'COST', 'CSCO', 'CVS', 'CVX', 'DD', 'DIS', 'DOW',
+            'DVN', 'EBAY', 'EMC', 'EMR', 'EXC', 'F', 'FB', 'FCX', 'FDX', 'FOXA', 'GD', 'GE',
+            'GILD', 'GM', 'GOOGL', 'GS', 'HAL', 'HD', 'HON', 'HPQ', 'IBM', 'INTC', 'JNJ', 'JPM',
+            'KO', 'LLY', 'LMT', 'LOW', 'MA', 'MCD', 'MDLZ', 'MDT', 'MET', 'MMM', 'MO', 'MON',
+            'MRK', 'MS', 'MSFT', 'NKE', 'NOV', 'NSC', 'ORCL', 'OXY', 'PEP', 'PFE', 'PG', 'PM',
+            'QCOM', 'RTN', 'SBUX', 'SLB', 'SO', 'SPG', 'T', 'TGT', 'TWX', 'TXN', 'UNH', 'UNP',
+            'UPS', 'USB', 'UTX', 'V', 'VZ', 'WAG', 'WFC', 'WMT', 'XOM']
+  
+  var dict = {};
+  var change = {}
+  var temp;
+
+
+  
+    function loop() {
+          var j;
+          for(j = 0; j < markets.length; j++)
+            {
+              var link = "http://localhost:5555/quote?s=";
+              link += markets[j];
+              $.getJSON( link, ping);
+              
+              change[markets[j]] = dict[markets[j]] - temp;
+              dict[markets[j]] = temp;
+              
+
+            }
+         setTimeout(loop, 15000);
+    }
+    
+    
+    
+    function ping(json) {
+      
+      document.getElementById(markets[j]).innerHTML = "$" + json["price"];
+
+      
+    }
+    
+    </script>
+    <div class="container">
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="boxes1">
+    </div>
+    <script>
+      var html = '';
+      var i;
+      for (i = 0; i < 15; i++) { 
+        html += '<button type="button" class="btn btn-primary  btn-outline">'; 
+        html += markets[i];
+        html += '</button>';
+        html += '<button type="button" class="btn btn-info  btn-outline">';
+        html += 'Shares Owned';
+        html += '</button>';
+        html += '<button type="button" class="btn btn-default  btn-outline" >';
+        html += dict[markets[i]]
+        html += '</button>';
+        html += '<br> <br>';
+      }
+    $( ".boxes1" ).append( html );
+    </script>
+    </div>
+    <div class="col-sm-4">
+      <div class="boxes2">
+    </div>
+      <script>
+      var html = '';
+      var i;
+      for (i = 15; i < 30; i++) { 
+        html += '<button type="button" class="btn btn-primary btn-outline">'; 
+        html += 'Symbol';
+        html += '</button>';
+        html += '<button type="button" class="btn btn-info btn-outline">';
+        html += 'Shares Owned';
+        html += '</button>';
+        html += '<button type="button" class="btn btn-default btn-outline">';
+        html += 'Price Per Share';
+        html += '</button>';
+        html += '<br> <br>';
+      }
+    $( ".boxes2" ).append( html );
+    </script>
+    </div>
+    <div class="col-sm-4">
+      <div class="boxes3">
+    </div>
+      <script>
+      var html = '';
+      var i;
+      for (i = 30; i < 45; i++) { 
+        html += '<button type="button" class="btn btn-primary btn-outline">'; 
+        html += 'Symbol';
+        html += '</button>';
+        html += '<button type="button" class="btn btn-info btn-outline">';
+        html += 'Shares Owned';
+        html += '</button>';
+        html += '<button type="button" class="btn btn-default btn-outline">';
+        html += 'Price Per Share';
+        html += '</button>';
+        html += '<br> <br>';
+      }
+    $( ".boxes3" ).append( html );
+    </script>
+    </div>
+  </div>
+</div>
+  </body>
+</html>
