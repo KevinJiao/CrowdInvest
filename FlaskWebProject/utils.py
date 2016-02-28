@@ -42,7 +42,8 @@ def get_quote(symbol):
         return None
     now = datetime.now()
     offset = now - ref
-    return float(dataDict[symbol][offset.seconds / 15][1])
+    print offset
+    return float(dataDict[symbol][int(offset.total_seconds()) // 15][1])
 
 
 def order(order, sym, val, g):
@@ -71,18 +72,20 @@ def get_trades(g):
 
 def buy(sym, val, g):
     try:
-        quote = get_quote(symbol)
+        quote = get_quote(sym)
         if not quote:
             return quote
 
         g.db.execute("INSERT OR IGNORE INTO portfolio VALUES (?,?)", ['funds', 10**6])
         funds = g.db.execute("SELECT sym, amount FROM portfolio WHERE sym = ?", ["funds"]).fetchall()[0][1]
         cost = quote * float(val)
+        print 'quotea: ' + str(quote)
+        print 'cost: ' + str(cost)
         g.db.execute("INSERT OR IGNORE INTO portfolio VALUES (?,?)", [sym, 0])
         g.db.execute("UPDATE portfolio SET amount = amount + ? WHERE sym = ?", [val, sym])
         g.db.execute("UPDATE portfolio SET amount = ? WHERE sym = ?", [funds - cost, "funds"])
     except:
-        return traceback.format_exc()
+        print traceback.format_exc()
 
 
 def sell(symbol, val):
@@ -115,11 +118,16 @@ def get_portfolio_val(g):
         funds = g.db.execute("SELECT sym, amount FROM portfolio WHERE sym = ?", ["funds"]).fetchall()[0][1]
         for sym in portfolio:
             quote = get_quote(sym)
+            print 'quoteb: ' + str(quote)
             value += quote * portfolio[sym]
+
+        print 'portfolio: ' + str(value)
+        print 'funds: ' + str(funds)
         update_history(value+funds, g)
         return value + funds
     except:
-        return traceback.format_exc()
+        print 'shit'
+        print traceback.format_exc()
 
 
 def update_history(val, g):

@@ -7,6 +7,7 @@ from flask import render_template
 from flask import jsonify
 from flask import request
 from flask import g
+import traceback
 from FlaskWebProject import app
 import utils
 import requests
@@ -115,5 +116,5 @@ def promptio():
         utils.order(order, sym, value, g)
         #insert JSON response here
     return jsonify(sendmms=False, showauthurl=False, authstate=None,
-    text="hi", speech="hi", status="OK", webhookreply=None, 
+    text="hi", speech="hi", status="OK", webhookreply=None,
     images=[{"imageurl":None, "alttext":"hi there"}]) #insert json responses here
