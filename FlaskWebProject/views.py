@@ -115,4 +115,4 @@ def promptio():
         #insert JSON response here
     return jsonify(sendmms=False, showauthurl=False, authstate=None,
     text="hi", speech="hi", status="OK", webhookreply=None, 
-    images={imageurl:None, alttext:"hi there"}) #insert json responses here
+    images=[{"imageurl":None, "alttext":"hi there"}]) #insert json responses here
