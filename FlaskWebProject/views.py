@@ -9,7 +9,7 @@ from flask import request
 from flask import make_response
 from flask import g
 import traceback
-import twilio.twiml
+import twilio.twiml as twiml
 from FlaskWebProject import app
 import utils
 import requests
@@ -105,7 +105,7 @@ def status():
 @app.route('/twilio', methods=['POST', 'GET'])
 def twilio():
     body = request.form['Body'].split(' ')
-    resp = twilio.twiml.Response()
+    resp = twiml.Response()
     myText = "unknown command. Please enter: <buy/sell TICKER #OFSHARES> to make a trade."
     if len(body) != 3:
         resp.message(myText)
