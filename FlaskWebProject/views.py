@@ -76,7 +76,7 @@ def history():
 @app.route('/quote')
 def quote():
     sym = request.args.get('s')
-    return jsonify(price=utils.get_quote(sym))
+    return jsonify(sym=sym, price=utils.get_quote(sym))
 
 
 @app.route('/order', methods=['POST'])
@@ -89,6 +89,7 @@ def buy():
         return str(r)
     return "not valid"
 
+
 @app.route('/status')
 def status():
     value = utils.get_portfolio_val(g)
@@ -99,6 +100,7 @@ def status():
     cash = g.db.execute("SELECT sym, amount FROM portfolio WHERE sym = ?", ["funds"]).fetchall()[0][1]
     return jsonify(cash=cash, value=value, portfolio=portfolio, history=history, trades=trades, top=top)
 
+
 @app.route('/twilio', methods=['POST', 'GET'])
 def twilio():
     body = request.form['Body'].split(' ')
@@ -107,6 +109,7 @@ def twilio():
     order, sym, value = body
     utils.order(order, sym, value, g)
     return "we gucci"
+
 
 @app.route('/promptio', methods=['POST'])
 def promptio():
@@ -119,9 +122,8 @@ def promptio():
         order, sym, value = body
         utils.order(order, sym, value, g)
         myText = "Nice! You put in an order to " + order.lower() + " $" + value + " worth of " + sym.upper()
-        #insert JSON response here
     dat = jsonify(sendmms=False, showauthurl=False, authstate=None,
-        text=myText, speech=myText, status="OK", webhookreply=None,
-        images=[{"imageurl":None, "alttext":None}]) #insert json responses here        
-    resp = make_response(dat, 200, {"Content-Type":"application/json"})
+                  text=myText, speech=myText, status="OK", webhookreply=None,
+                  images=[{"imageurl": None, "alttext": None}])  # insert json responses here
+    resp = make_response(dat, 200, {"Content-Type": "application/json"})
     return resp
