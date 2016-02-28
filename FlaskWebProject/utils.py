@@ -45,12 +45,12 @@ def get_quote(symbol):
     return float(dataDict[symbol][offset.seconds / 15][1])
 
 
-def order(order, sym, val):
+def order(order, sym, val, g):
     if order.lower() in ['b', 'buy']:
-        buy(sym.upper(), val)
+        buy(sym.upper(), val, g)
 
     elif order.lower() in ['s', 'sell']:
-        sell(sym.upper(), val)
+        sell(sym.upper(), val, g)
 
     global trades
     if len(trades) > 10:
@@ -58,20 +58,23 @@ def order(order, sym, val):
     trades.insert(0, str(order) + ' ' + str(sym) + ' ' + str(val))
 
 
-def buy(symbol, val):
+def buy(sym, val, g):
     quote = get_quote(symbol)
     if not quote:
         return
 
-    # if val > funds:
-    #    print "insufficient funds"
-    #    return
-    if symbol not in portfolio:
-        portfolio[symbol] = float(val)/float(quote)
-    else:
-        portfolio[symbol] += float(val)/float(quote)
-    global funds
-    funds -= float(val)
+    g.db.execute("INSERT OR IGNORE INTO portfolio VALUES (?,?)", ['funds', 10**6])
+    g.db.commit()
+    funds = g.db.execute("SELECT sym, amount FROM portfolio WHERE sym = ?", ["funds"]).fetchall()[0][1]
+    cost = quote * float(val)
+
+    if funds < cost:
+        print funds, val
+        return
+    g.db.execute("INSERT OR IGNORE INTO portfolio VALUES (?,?)", [sym, 0])
+    g.db.execute("UPDATE portfolio SET amount = amount + ? WHERE sym = ?", [val, sym])
+    g.db.execute("UPDATE portfolio SET amount = amount + ? WHERE sym = ?", [funds - cost, "funds"])
+    g.db.commit()
 
 
 def sell(symbol, val):

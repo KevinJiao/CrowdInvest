@@ -1,14 +1,33 @@
 """
 Routes and views for the flask application.
 """
-
+import sqlite3
 from datetime import datetime
 from flask import render_template
 from flask import jsonify
 from flask import request
+from flask import g
 from FlaskWebProject import app
 import utils
 now = datetime(2016, 2, 27, 3, 7, 17, 966565)
+
+
+@app.before_request
+def before_request():
+    g.db = sqlite3.connect("portfolio.db")
+
+
+@app.teardown_request
+def teardown_request(exception):
+    if hasattr(g, 'db'):
+        g.db.close()
+
+
+@app.route('/query.html')
+def emails():
+    symbols = g.db.execute("SELECT sym, amount FROM portfolio").fetchall()
+    print symbols
+    return str(symbols)
 
 
 @app.route('/')
@@ -64,7 +83,7 @@ def buy():
     val = request.form['val']
 
     print order, sym, val
-    utils.order(order, sym, val)
+    utils.order(order, sym, val, g)
     return "ordered"
 
 
