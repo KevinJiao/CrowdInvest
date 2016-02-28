@@ -21,7 +21,7 @@
     font-family: "Trebuchet MS", Verdana, sans-serif;
     font-size: 16px;
     background-color: 	#000000;
-    color: 	#99ccff; 
+    color: 	#99ccff;
     padding: 3px;
 }
 
@@ -29,7 +29,7 @@
     font-size: 22;
     display: block;
     width: 660%;
-    
+
 }
 
   .btn-outline {
@@ -67,16 +67,16 @@
 }
 </style>
   <body>
-   
 
-    
+
+
    <br>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="/static/scripts/bootstrap.min.js"></script>
-    
-    
+
+
     <script>
    var markets = ['F_AD', 'F_BO', 'F_BP', 'F_C', 'F_CC', 'F_CD',
            'F_CL', 'F_CT', 'F_DX', 'F_EC', 'F_ED', 'F_ES', 'F_FC', 'F_FV', 'F_GC',
@@ -103,7 +103,7 @@ for(j = 0; j < 45; j++)
     $.getJSON( link, ping);
   }
 
-  
+
     function loop() {
           var j;
           $.getJSON( "/status", ping2);
@@ -116,16 +116,16 @@ for(j = 0; j < 45; j++)
             }
          setTimeout(loop, 15000);
     }
-    
-    
-    
+
+
+
     function ping(json) {
-      
+
       prices[json["sym"]] = json["price"];
       console.log(markets.indexOf(json["sym"]));
       document.getElementById("price" + markets.indexOf(json["sym"])).innerHTML = "$" + json["price"].toFixed(2);
 
-      
+
     }
 
     function ping2(json) {
@@ -136,37 +136,37 @@ for(j = 0; j < 45; j++)
         if (json["portfolio"][a] !== undefined) {
           tempA = json["portfolio"][a] * prices[a];
         } else {
-          tempA = 0;  
+          tempA = 0;
         }
         if (json["portfolio"][b] !== undefined) {
           tempB = json["portfolio"][b] * prices[b];
         } else {
-          tempB = 0;  
+          tempB = 0;
         }
         return tempB - tempA;
       }
 
       markets = markets.sort(compare);
       for (i = 0; i < 45; i++) {
-        document.getElementById(i).innerHTML = markets[i];        
+        document.getElementById(i).innerHTML = markets[i];
       }
 
       for (j = 0; j < 45; j++) {
         if (json["portfolio"][markets[j]] !== undefined) {
-          document.getElementById("num" + j).innerHTML = json["portfolio"][markets[j]];        
+          document.getElementById("num" + j).innerHTML = json["portfolio"][markets[j]];
         } else {
-          document.getElementById("num" + j).innerHTML = 0;        
+          document.getElementById("num" + j).innerHTML = 0;
         }
       }
     }
 
     loop();
-    
+
     </script>
     <div class="container">
   <div class="row">
         <div class = "col-md-2 col-centered text-center">
-        <a href = "http://ticker.tech" class = "btn btn-primary btn-block" role = "button"> Return Home</a>
+        <a href = "/" class = "btn btn-primary btn-block" role = "button"> Return Home</a>
         <br> <br>
         </div>
       </div>
@@ -177,8 +177,8 @@ for(j = 0; j < 45; j++)
     <script>
       var html = '';
       var i;
-      for (i = 0; i < 15; i++) { 
-        html += '<button type="button" class="btn btn-primary  btn-outline" id=' + i + '>'; 
+      for (i = 0; i < 15; i++) {
+        html += '<button type="button" class="btn btn-primary  btn-outline" id=' + i + '>';
         html += markets[i];
         html += '</button>';
         html += '<button type="button" class="btn btn-info  btn-outline" id=num' + i + '>';
@@ -196,8 +196,8 @@ for(j = 0; j < 45; j++)
       <script>
       var html = '';
       var i;
-      for (i = 15; i < 30; i++) { 
-        html += '<button type="button" class="btn btn-primary btn-outline" id=' + i + '>'; 
+      for (i = 15; i < 30; i++) {
+        html += '<button type="button" class="btn btn-primary btn-outline" id=' + i + '>';
         html += markets[i];
         html += '</button>';
         html += '<button type="button" class="btn btn-info btn-outline" id=num' + i + '>';
@@ -215,8 +215,8 @@ for(j = 0; j < 45; j++)
       <script>
       var html = '';
       var i;
-      for (i = 30; i < 45; i++) { 
-        html += '<button type="button" class="btn btn-primary btn-outline" id=' + i + '>'; 
+      for (i = 30; i < 45; i++) {
+        html += '<button type="button" class="btn btn-primary btn-outline" id=' + i + '>';
         html += markets[i];
         html += '</button>';
         html += '<button type="button" class="btn btn-info btn-outline" id=num' + i + '>';
