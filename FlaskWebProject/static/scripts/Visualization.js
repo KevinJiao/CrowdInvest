@@ -77,14 +77,6 @@ function ping(json) {
             data.shift();
         }
     }
-    var myLine = document.getElementById("bigLine");
-    if (json["value"] > data[0].assets) {
-        myLine.stroke = "green";
-    } else if (json["value"] > data[0].assets) {
-        myLine.stroke = "red";
-    } else {
-        myLine.stroke = "steelblue";
-    }
 
     document.getElementById("cash").innerHTML = "$" + json["cash"].toFixed(2);
 
@@ -130,8 +122,19 @@ function ping(json) {
       .datum(data)
       .attr("class", "line")
       .attr("d", line)
-      .attr("id", "bigLine");
+      .attr("stroke", "steelblue")
 
+    var myLine = document.getElementsByClassName("line")[0];
+    if (json["value"] > data[0].assets) {
+        console.log("green");
+        myLine.style.stroke = "green";
+    } else if (json["value"] < data[0].assets) {
+        console.log("red");
+        myLine.style.stroke = "red";
+    } else {
+        console.log("blue");
+        myLine.style.stroke = "steelblue";
+    }
 }
 
 function ping2(json) {
