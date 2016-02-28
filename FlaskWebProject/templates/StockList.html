@@ -87,9 +87,10 @@
 
 var prices = {};
 
+
 for(j = 0; j < 45; j++)
   {
-    var link = "http://localhost:5555/quote?s=";
+    var link = "/quote?s=";
     link += markets[j];
     $.getJSON( link, ping);
   }
@@ -97,11 +98,12 @@ for(j = 0; j < 45; j++)
   
     function loop() {
           var j;
-          $.getJSON( "http://localhost:5555/status", ping2);
+          $.getJSON( "/status", ping2);
           for(j = 0; j < 45; j++)
             {
-              var link = "http://localhost:5555/quote?s=";
+              var link = "/quote?s=";
               link += markets[j];
+              console.log(j);
               $.getJSON( link, ping);
             }
          setTimeout(loop, 15000);
@@ -112,7 +114,8 @@ for(j = 0; j < 45; j++)
     function ping(json) {
       
       prices[json["sym"]] = json["price"];
-      document.getElementById(json["sym"]).innerHTML = "$" + json["price"].toFixed(2);
+      console.log(markets.indexOf(json["sym"]));
+      document.getElementById("price" + markets.indexOf(json["sym"])).innerHTML = "$" + json["price"].toFixed(2);
 
       
     }
@@ -166,9 +169,7 @@ for(j = 0; j < 45; j++)
         html += '</button>';
         html += '<button type="button" class="btn btn-info  btn-outline" id=num' + i + '>';
         html += '</button>';
-        html += '<button type="button" class="btn btn-default  btn-outline" id =';
-        html += markets[i];
-        html += '>';
+        html += '<button type="button" class="btn btn-default  btn-outline" id=price' + i + '>';
         html += '</button>';
         html += '<br> <br>';
       }
@@ -187,9 +188,7 @@ for(j = 0; j < 45; j++)
         html += '</button>';
         html += '<button type="button" class="btn btn-info btn-outline" id=num' + i + '>';
         html += '</button>';
-        html += '<button type="button" class="btn btn-default btn-outline" id = ';
-        html += markets[i];
-        html += '>';
+        html += '<button type="button" class="btn btn-default btn-outline" id=price' + i + '>';
         html += '</button>';
         html += '<br> <br>';
       }
@@ -208,9 +207,7 @@ for(j = 0; j < 45; j++)
         html += '</button>';
         html += '<button type="button" class="btn btn-info btn-outline" id=num' + i + '>';
         html += '</button>';
-        html += '<button type="button" class="btn btn-default btn-outline" id = ';        
-        html += markets[i];
-        html += '>';
+        html += '<button type="button" class="btn btn-default btn-outline" id=price' + i + '>';
         html += '</button>';
         html += '<br> <br>';
       }
