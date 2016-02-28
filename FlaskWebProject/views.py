@@ -7,6 +7,7 @@ from flask import render_template
 from flask import jsonify
 from flask import request
 from flask import g
+import traceback
 from FlaskWebProject import app
 import utils
 import requests
@@ -106,11 +107,14 @@ def twilio():
 
 @app.route('/promptio', methods=['POST'])
 def promptio():
-    print("received promptio")
-    myJson = request.get_json()
-    body = myJson['message'].split(" ")
-    if len(body) == 3:
-        order, sym, value = body
-        utils.order(order, sym, value)
-        #insert JSON response here
-    return jsonify(sendmms=False, showauthurl=False, authstate=False, text="hi", speech="hi",status="OK") #insert json responses here
+    try:
+        print("received promptio")
+        myJson = request.get_json()
+        body = myJson['message'].split(" ")
+        if len(body) == 3:
+            order, sym, value = body
+            utils.order(order, sym, value)
+            #insert JSON response here
+        return jsonify(sendmms=False, showauthurl=False, authstate=False, text="hi", speech="hi",status="OK") #insert json responses here
+    except:
+        return jsonify(traceback.print_exc())
