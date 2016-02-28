@@ -120,9 +120,9 @@ def twilio():
 @app.route('/promptio', methods=['POST'])
 def promptio():
     myJson = request.get_json()
-    myText = "enter <@stock_00017 status> to check portfolio value. enter <@stock_00017 buy/sell TICKER #OFSHARES> to make a trade."
+    myText = "enter <@stock_00017 status> to check portfolio value. " +
+        "enter <@stock_00017 buy/sell TICKER #OFSHARES> to make a trade."
     body = myJson['message'].split(" ")
-    myText = ""
     if body[0] == "status":
         myText = str(utils.get_portfolio_val(g))
     if len(body) == 3:
