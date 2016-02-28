@@ -96,7 +96,7 @@ def status():
     value = utils.get_portfolio_val(g)
     portfolio = utils.get_portfolio(g)
     history = utils.get_history(g)
-    trades = utils.get_trades(g)[::-1]
+    trades = utils.get_trades(g)
     top = utils.get_top(g)
     cash = g.db.execute("SELECT sym, amount FROM portfolio WHERE sym = ?", ["funds"]).fetchall()[0][1]
     return jsonify(cash=cash, value=value, portfolio=portfolio, history=history, trades=trades, top=top)
