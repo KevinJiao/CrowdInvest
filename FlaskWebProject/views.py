@@ -100,9 +100,9 @@ def status():
 def twilio():
     body = request.form['Body'].split(' ')
     if len(body) != 3:
-        return
+        return "we not gucci"
     order, sym, value = body
-    utils.order(order, sym, value)
+    utils.order(order, sym, value, g)
     return "we gucci"
 
 @app.route('/promptio', methods=['POST'])
