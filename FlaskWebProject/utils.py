@@ -23,7 +23,6 @@ markets += ['CASH', 'AAPL', 'ABBV', 'ABT', 'ACN', 'AEP', 'AIG', 'ALL',
 
 dataDict = {}
 portfolio = {}
-funds = 10**6
 history = [10**6]
 trades = []
 
@@ -39,6 +38,8 @@ for symbol in markets:
 
 def get_quote(symbol):
     if symbol not in dataDict.keys():
+        print symbol
+        print "Symbol not in"
         return None
     now = datetime.now()
     offset = now - ref
@@ -52,10 +53,16 @@ def order(order, sym, val, g):
     elif order.lower() in ['s', 'sell']:
         sell(sym.upper(), val, g)
 
-    global trades
-    if len(trades) > 10:
-        trades.pop()
-    trades.insert(0, str(order) + ' ' + str(sym) + ' ' + str(val))
+    g.db.execute("INSERT INTO orders (trade) VALUES (?)", [str(order) + ' ' + str(sym) + ' ' + str(val)])
+    g.db.commit()
+
+
+def get_trades(g):
+    history = []
+    trades = g.db.execute("SELECT trade FROM orders ORDER BY ID DESC").fetchall(),
+    for trade in trades[0]:
+        history.append(trade[0])
+    return history
 
 
 def buy(sym, val, g):
@@ -67,13 +74,11 @@ def buy(sym, val, g):
     g.db.commit()
     funds = g.db.execute("SELECT sym, amount FROM portfolio WHERE sym = ?", ["funds"]).fetchall()[0][1]
     cost = quote * float(val)
-
     if funds < cost:
-        print funds, val
         return
     g.db.execute("INSERT OR IGNORE INTO portfolio VALUES (?,?)", [sym, 0])
     g.db.execute("UPDATE portfolio SET amount = amount + ? WHERE sym = ?", [val, sym])
-    g.db.execute("UPDATE portfolio SET amount = amount + ? WHERE sym = ?", [funds - cost, "funds"])
+    g.db.execute("UPDATE portfolio SET amount = ? WHERE sym = ?", [funds - cost, "funds"])
     g.db.commit()
 
 
@@ -88,20 +93,24 @@ def sell(symbol, val):
         portfolio[symbol] -= float(val)/quote
 
 
-def get_portfolio_val():
-    try:
-        val = 0
-        for sym in portfolio:
-            quote = get_quote(sym)
-            val += quote * portfolio[sym]
+def get_portfolio(g):
+    rows = g.db.execute("SELECT sym, amount FROM portfolio where sym != ?", ['funds']).fetchall()
+    portfolio = {}
+    for sym, amount in rows:
+        portfolio[sym] = amount
 
-        global funds
-        val += funds
-        if math.fabs(val - history[0]) > 1e-09:
-            update_history(val)
-        return val
-    except:
-        print traceback.format_exc()
+    return portfolio
+
+
+def get_portfolio_val(g):
+    value = 0
+    portfolio = get_portfolio(g)
+    funds = g.db.execute("SELECT sym, amount FROM portfolio WHERE sym = ?", ["funds"]).fetchall()[0][1]
+    for sym in portfolio:
+        quote = get_quote(sym)
+        value += quote * portfolio[sym]
+
+    return value + funds
 
 
 def update_history(val):

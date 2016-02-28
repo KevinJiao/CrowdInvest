@@ -3,3 +3,8 @@
     sym text PRIMARY KEY not null,
     amount integer not null
 );
+drop table if exists orders;
+create table orders (
+        ID INTEGER PRIMARY KEY,
+        trade TEXT not null
+);

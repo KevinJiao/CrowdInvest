@@ -82,17 +82,16 @@ def buy():
     sym = request.form['sym']
     val = request.form['val']
 
-    print order, sym, val
     utils.order(order, sym, val, g)
     return "ordered"
 
 
 @app.route('/status')
 def status():
-    value = utils.get_portfolio_val()
-    portfolio = utils.portfolio
+    value = utils.get_portfolio_val(g)
+    portfolio = utils.get_portfolio(g)
     history = utils.history
-    trades = utils.trades
+    trades = utils.get_trades(g)
     return jsonify(value=value, portfolio=portfolio, history=history, trades=trades)
 
 

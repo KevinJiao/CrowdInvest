@@ -64,5 +64,3 @@ while True:
                         "sym": sym,
                         "val": val})
                     print(res)
-            with open("commands.txt", "w") as f:
-                    f.write(out + '\n')
