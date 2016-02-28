@@ -51,9 +51,9 @@ function recent() {
 function ping(json) {
 
     if (json["value"] > 1000000) {
-      document.getElementById("total").innerHTML = "$" + json["value"].toFixed(2) + "   (" + String.fromCharCode(9650) + " +" + (json["value"] - 1000000).toFixed(2) + ")";
+      document.getElementById("total").innerHTML = "$" + json["value"].toFixed(2) + "   <span style='color:green'>(" + String.fromCharCode(9650) + " +" + (json["value"] - 1000000).toFixed(2) + ")</span>";
     } else {
-      document.getElementById("total").innerHTML = "$" + json["value"].toFixed(2) + "   (" + String.fromCharCode(9662) + " " + (json["value"] - 1000000).toFixed(2) + ")";
+      document.getElementById("total").innerHTML = "$" + json["value"].toFixed(2) + "   <span style='color:red'>(" + String.fromCharCode(9662) + " " + (json["value"] - 1000000).toFixed(2) + ")</span>";
     }
 
     if (data.length == 0) {
