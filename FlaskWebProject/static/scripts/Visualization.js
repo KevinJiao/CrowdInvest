@@ -1,6 +1,6 @@
 var timeFormat = d3.time.format("%I:%M:%S");
 
-var margin = {top: 20, right: 100, bottom: 30, left: 50},
+var margin = {top: 20, right: 100, bottom: 30, left: 100},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -66,7 +66,13 @@ function ping(json) {
     document.getElementById("hold0").innerHTML = portfolio["AAPL"];
 
     x.domain(d3.extent(data, function(d) { return d.date; }));
-    y.domain(d3.extent(data, function(d) { return d.assets; }));
+
+    var temp = [];
+    for (i = 0; i < data.length; i++) {
+      temp.push(Math.abs(data[0].assets - data[i].assets));
+    }
+    var range = Math.max.apply(null, temp);
+    y.domain([data[0].assets - range, data[0].assets + range]);
 
     d3.select("svg").remove();
 
@@ -89,7 +95,7 @@ function ping(json) {
       .attr("y", 6)
       .attr("dy", ".71em")
       .style("text-anchor", "end")
-      .text("Price ($)");
+      .text("Assets ($)");
 
     svg.append("path")
       .datum(data)
