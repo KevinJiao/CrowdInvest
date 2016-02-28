@@ -79,7 +79,7 @@ function ping(json) {
         }
     }
 
-    document.getElementById("cash").innerHTML = "$" + json["cash"];
+    document.getElementById("cash").innerHTML = "$" + json["cash"].toFixed(2);
 
     var top = json["top"];
     for (i = 0; i < top.length; i++) {
