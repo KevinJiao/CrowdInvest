@@ -101,17 +101,18 @@ def twilio():
     if len(body) != 3:
         return
     order, sym, value = body
-    utils.order(order, sym, value)
+    utils.order(order, sym, value, g)
     return "we gucci"
 
 @app.route('/promptio', methods=['POST'])
 def promptio():
     print("received promptio")
     myJson = request.get_json()
+    print(myJson['message'])
     body = myJson['message'].split(" ")
     if len(body) == 3:
         order, sym, value = body
-        utils.order(order, sym, value)
+        utils.order(order, sym, value, g)
         #insert JSON response here
     return jsonify(sendmms=False, showauthurl=False, authstate=None,
     text="hi", speech="hi", status="OK", webhookreply=None, 
