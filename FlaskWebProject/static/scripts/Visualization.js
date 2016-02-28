@@ -141,7 +141,7 @@ function ping2(json) {
 
     var trades = json["trades"];
     for (i = 0; i < Math.min(trades.length, 10); i++) {
-      document.getElementById("recent" + i).innerHTML = trades[Math.min(trades.length, 10) - i - 1];
+      document.getElementById("recent" + i).innerHTML = trades[Math.max(trades.length, 11) - 11 + i];
     }
 
 }
