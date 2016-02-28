@@ -61,6 +61,11 @@ function ping(json) {
         }
     }
 
+    var trades = json["trades"];
+    for (i = 0; i < Math.min(trades.length, 10); i++) {
+      document.getElementById("recent" + i).innerHTML = trades[Math.min(trades.length, 10) - i - 1];
+    }
+
     var portfolio = json["portfolio"];
     document.getElementById("tick0").innerHTML = "AAPL";
     document.getElementById("hold0").innerHTML = portfolio["AAPL"];
