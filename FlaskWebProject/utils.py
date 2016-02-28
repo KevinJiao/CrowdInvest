@@ -95,6 +95,9 @@ def buy(sym, val, g):
         g.db.execute("INSERT OR IGNORE INTO portfolio VALUES (?,?)", ['funds', 10**6])
         funds = g.db.execute("SELECT sym, amount FROM portfolio WHERE sym = ?", ["funds"]).fetchall()[0][1]
         cost = quote * float(val)
+        if cost > funds:
+            print cost, funds
+            return
         print 'quotea: ' + str(quote)
         print 'cost: ' + str(cost)
         g.db.execute("INSERT OR IGNORE INTO portfolio VALUES (?,?)", [sym, 0])
@@ -104,15 +107,20 @@ def buy(sym, val, g):
         print traceback.format_exc()
 
 
-def sell(symbol, val):
-    quote = get_quote(symbol)
-    if not quote or symbol not in portfolio:
-        return
-
-    if portfolio[symbol] < float(val)/quote:
-        portfolio[symbol] = 0
-    else:
-        portfolio[symbol] -= float(val)/quote
+def sell(sym, val, g):
+    try:
+        quote = get_quote(sym)
+        if not quote:
+            return quote
+        amount = g.db.execute("SELECT sym, amount FROM portfolio WHERE sym = ?", [sym]).fetchall()[0][1]
+        funds = g.db.execute("SELECT sym, amount FROM portfolio WHERE sym = ?", ["funds"]).fetchall()[0][1]
+        if float(val) > amount:
+            return
+        profit = quote * float(val)
+        g.db.execute("UPDATE portfolio SET amount = amount - ? WHERE sym = ?", [val, sym])
+        g.db.execute("UPDATE portfolio SET amount = ? WHERE sym = ?", [funds + profit, "funds"])
+    except:
+        print traceback.format_exc()
 
 
 def get_portfolio(g):
