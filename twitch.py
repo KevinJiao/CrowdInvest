@@ -63,4 +63,4 @@ while True:
                         "order": order,
                         "sym": sym,
                         "val": val})
-                    print(res)
+                    print(res.text)

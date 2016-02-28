@@ -1,6 +1,5 @@
 from datetime import datetime
 import traceback
-import math
 import csv
 
 ref = datetime(2016, 2, 27, 11, 39, 32, 684190)
@@ -52,6 +51,8 @@ def order(order, sym, val, g):
 
     elif order.lower() in ['s', 'sell']:
         sell(sym.upper(), val, g)
+    else:
+        return
 
     g.db.execute("INSERT INTO orders (trade) VALUES (?)", [str(order) + ' ' + str(sym) + ' ' + str(val)])
     g.db.commit()
