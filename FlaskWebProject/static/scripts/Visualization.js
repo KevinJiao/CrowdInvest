@@ -49,7 +49,7 @@ function recent() {
 }
 
 function ping(json) {
-    if (json["value"] > json["history"][1]) {
+    if (json["value"] >= json["history"][1]) {
       document.getElementById("total").innerHTML = "$" + json["value"].toFixed(2) + "   <span style='color:green'>(" + String.fromCharCode(9650) + " +" + (json["value"] - json["history"][1]).toFixed(2) + ")</span>";
     } else {
       document.getElementById("total").innerHTML = "$" + json["value"].toFixed(2) + "   <span style='color:red'>(" + String.fromCharCode(9662) + " " + (json["value"] - json["history"][1]).toFixed(2) + ")</span>";
@@ -76,6 +76,14 @@ function ping(json) {
         if (data.length == 121) {
             data.shift();
         }
+    }
+    var myLine = document.getElementById("bigLine");
+    if (json["value"] > data[0].assets) {
+        myLine.stroke = "green";
+    } else if (json["value"] > data[0].assets) {
+        myLine.stroke = "red";
+    } else {
+        myLine.stroke = "steelblue";
     }
 
     document.getElementById("cash").innerHTML = "$" + json["cash"];
@@ -121,7 +129,8 @@ function ping(json) {
     svg.append("path")
       .datum(data)
       .attr("class", "line")
-      .attr("d", line);
+      .attr("d", line)
+      .attr("id", "bigLine");
 
 }
 
