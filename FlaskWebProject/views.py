@@ -7,7 +7,8 @@ from flask import render_template
 from flask import jsonify
 from flask import request
 from FlaskWebProject import app
-import utils, requests
+import utils
+import requests
 now = datetime(2016, 2, 27, 3, 7, 17, 966565)
 
 
@@ -63,7 +64,7 @@ def buy():
     sym = request.form['sym']
     val = request.form['val']
 
-    print order, sym, val
+    print (order, sym, val)
     utils.order(order, sym, val)
     return "ordered"
 
