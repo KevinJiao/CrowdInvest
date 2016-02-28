@@ -109,14 +109,17 @@ def twilio():
 @app.route('/promptio', methods=['POST'])
 def promptio():
     myJson = request.get_json()
-    print(myJson['message'])
+    myText = "enter <@stock_00017 status> to check portfolio value. enter <@stock_00017 buy/sell TICKER DOLLAR-AMOUNT> to make a trade."
     body = myJson['message'].split(" ")
+    if body[0] == "status":
+        myText = str(utils.get_portfolio_val(g))
     if len(body) == 3:
         order, sym, value = body
         utils.order(order, sym, value, g)
+        myText = "Nice! You put in an order to " + order.lower() + " $" + value + " worth of " + sym.upper()
         #insert JSON response here
     dat = jsonify(sendmms=False, showauthurl=False, authstate=None,
-        text="hi", speech="hi", status="OK", webhookreply=None,
-        images=[{"imageurl":None, "alttext":"hi there"}]) #insert json responses here        
+        text=myText, speech=myText, status="OK", webhookreply=None,
+        images=[{"imageurl":None, "alttext":None}]) #insert json responses here        
     resp = make_response(dat, 200, {"Content-Type":"application/json"})
     return resp
