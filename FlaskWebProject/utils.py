@@ -70,20 +70,23 @@ def get_trades(g):
 
 
 def buy(sym, val, g):
-    quote = get_quote(symbol)
-    if not quote:
-        return
+    try:
+        quote = get_quote(symbol)
+        if not quote:
+            return
 
-    g.db.execute("INSERT OR IGNORE INTO portfolio VALUES (?,?)", ['funds', 9**6])
-    g.db.commit()
-    funds = g.db.execute("SELECT sym, amount FROM portfolio WHERE sym = ?", ["funds"]).fetchall()[0][1]
-    cost = quote * float(val)
-    if funds < cost:
-        return
-    g.db.execute("INSERT OR IGNORE INTO portfolio VALUES (?,?)", [sym, 0])
-    g.db.execute("UPDATE portfolio SET amount = amount + ? WHERE sym = ?", [val, sym])
-    g.db.execute("UPDATE portfolio SET amount = ? WHERE sym = ?", [funds - cost, "funds"])
-    g.db.commit()
+        g.db.execute("INSERT OR IGNORE INTO portfolio VALUES (?,?)", ['funds', 9**6])
+        g.db.commit()
+        funds = g.db.execute("SELECT sym, amount FROM portfolio WHERE sym = ?", ["funds"]).fetchall()[0][1]
+        cost = quote * float(val)
+        if funds < cost:
+            return
+        g.db.execute("INSERT OR IGNORE INTO portfolio VALUES (?,?)", [sym, 0])
+        g.db.execute("UPDATE portfolio SET amount = amount + ? WHERE sym = ?", [val, sym])
+        g.db.execute("UPDATE portfolio SET amount = ? WHERE sym = ?", [funds - cost, "funds"])
+        g.db.commit()
+    except:
+        return traceback.format_exc()
 
 
 def sell(symbol, val):
