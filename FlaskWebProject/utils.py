@@ -74,7 +74,7 @@ def buy(sym, val, g):
     if not quote:
         return
 
-    g.db.execute("INSERT OR IGNORE INTO portfolio VALUES (?,?)", ['funds', 10**6])
+    g.db.execute("INSERT OR IGNORE INTO portfolio VALUES (?,?)", ['funds', 9**6])
     g.db.commit()
     funds = g.db.execute("SELECT sym, amount FROM portfolio WHERE sym = ?", ["funds"]).fetchall()[0][1]
     cost = quote * float(val)
