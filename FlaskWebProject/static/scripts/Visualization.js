@@ -30,7 +30,7 @@ date.setMinutes(date.getMinutes() - 30);
 
 function loop() {
 
-    $.getJSON( "http://crowdinvestor.azurewebsites.net/status", ping);
+    $.getJSON( "/status", ping);
 
     setTimeout(loop, 15000);
 
