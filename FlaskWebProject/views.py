@@ -6,6 +6,7 @@ from datetime import datetime
 from flask import render_template
 from flask import jsonify
 from flask import request
+from flask import make_response
 from flask import g
 import traceback
 from FlaskWebProject import app
@@ -107,7 +108,6 @@ def twilio():
 
 @app.route('/promptio', methods=['POST'])
 def promptio():
-    print("received promptio")
     myJson = request.get_json()
     print(myJson['message'])
     body = myJson['message'].split(" ")
@@ -115,6 +115,8 @@ def promptio():
         order, sym, value = body
         utils.order(order, sym, value, g)
         #insert JSON response here
-    return jsonify(sendmms=False, showauthurl=False, authstate=None,
-    text="hi", speech="hi", status="OK", webhookreply=None,
-    images=[{"imageurl":None, "alttext":"hi there"}]) #insert json responses here
+    dat = jsonify(sendmms=False, showauthurl=False, authstate=None,
+        text="hi", speech="hi", status="OK", webhookreply=None,
+        images=[{"imageurl":None, "alttext":"hi there"}]) #insert json responses here        
+    resp = make_response(dat, 200, {"Content-Type":"application/json"})
+    return resp
