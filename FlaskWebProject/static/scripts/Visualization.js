@@ -49,11 +49,10 @@ function recent() {
 }
 
 function ping(json) {
-
-    if (json["value"] > 1000000) {
-      document.getElementById("total").innerHTML = "$" + json["value"].toFixed(2) + "   <span style='color:green'>(" + String.fromCharCode(9650) + " +" + (json["value"] - 1000000).toFixed(2) + ")</span>";
+    if (json["value"] >= json["history"][1]) {
+      document.getElementById("total").innerHTML = "$" + json["value"].toFixed(2) + "   <span style='color:green'>(" + String.fromCharCode(9650) + " +" + (json["value"] - json["history"][1]).toFixed(2) + ")</span>";
     } else {
-      document.getElementById("total").innerHTML = "$" + json["value"].toFixed(2) + "   <span style='color:red'>(" + String.fromCharCode(9662) + " " + (json["value"] - 1000000).toFixed(2) + ")</span>";
+      document.getElementById("total").innerHTML = "$" + json["value"].toFixed(2) + "   <span style='color:red'>(" + String.fromCharCode(9662) + " " + (json["value"] - json["history"][1]).toFixed(2) + ")</span>";
     }
 
     if (data.length == 0) {
@@ -78,13 +77,21 @@ function ping(json) {
             data.shift();
         }
     }
+    var myLine = document.getElementById("bigLine");
+    if (json["value"] > data[0].assets) {
+        myLine.stroke = "green";
+    } else if (json["value"] > data[0].assets) {
+        myLine.stroke = "red";
+    } else {
+        myLine.stroke = "steelblue";
+    }
 
     document.getElementById("cash").innerHTML = "$" + json["cash"].toFixed(2);
 
     var top = json["top"];
     for (i = 0; i < top.length; i++) {
       document.getElementById("tick" + i).innerHTML = top[i][0];
-      document.getElementById("hold" + i).innerHTML = "$" + top[i][1].toFixed(2);      
+      document.getElementById("hold" + i).innerHTML = "$" + top[i][1].toFixed(2);
     }
 
     x.domain(d3.extent(data, function(d) { return d.date; }));
@@ -122,7 +129,8 @@ function ping(json) {
     svg.append("path")
       .datum(data)
       .attr("class", "line")
-      .attr("d", line);
+      .attr("d", line)
+      .attr("id", "bigLine");
 
 }
 

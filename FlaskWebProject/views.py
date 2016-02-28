@@ -96,7 +96,7 @@ def status():
     value = utils.get_portfolio_val(g)
     portfolio = utils.get_portfolio(g)
     history = utils.get_history(g)
-    trades = utils.get_trades(g)
+    trades = utils.get_trades(g)[::-1]
     top = utils.get_top(g)
     cash = g.db.execute("SELECT sym, amount FROM portfolio WHERE sym = ?", ["funds"]).fetchall()[0][1]
     return jsonify(cash=cash, value=value, portfolio=portfolio, history=history, trades=trades, top=top)
@@ -106,8 +106,10 @@ def status():
 def twilio():
     body = request.form['Body'].split(' ')
     resp = twiml.Response()
-    myText = "unknown command. Please enter: <buy/sell TICKER #OFSHARES> to make a trade."
+    myText = "unknown command. Please enter: <buy/sell TICKER #OFSHARES> to make a trade, or enter <status> to see the current portfolio value."
     if len(body) != 3:
+        if body[0].lower() == "status":
+            myText = str(utils.get_portfolio_val(g))
         resp.message(myText)
         return str(resp)
     order, sym, value = body
@@ -122,7 +124,7 @@ def promptio():
     myJson = request.get_json()
     myText = "enter <@stock_00017 status> to check portfolio value. enter <@stock_00017 buy/sell TICKER #OFSHARES> to make a trade."
     body = myJson['message'].split(" ")
-    if body[0] == "status":
+    if body[0].lower() == "status":
         myText = str(utils.get_portfolio_val(g))
     if len(body) == 3:
         order, sym, value = body
