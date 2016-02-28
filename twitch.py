@@ -63,6 +63,4 @@ while True:
                         "order": order,
                         "sym": sym,
                         "val": val})
-                    print(res)
-            with open("commands.txt", "w") as f:
-                    f.write(out + '\n')
+                    print(res.text)

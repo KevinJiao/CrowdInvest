@@ -23,7 +23,6 @@ markets += ['CASH', 'AAPL', 'ABBV', 'ABT', 'ACN', 'AEP', 'AIG', 'ALL',
 
 dataDict = {}
 portfolio = {}
-funds = 10**6
 history = [10**6]
 trades = []
 
@@ -39,39 +38,56 @@ for symbol in markets:
 
 def get_quote(symbol):
     if symbol not in dataDict.keys():
+        print symbol
+        print "Symbol not in"
         return None
     now = datetime.now()
     offset = now - ref
     return float(dataDict[symbol][offset.seconds / 15][1])
 
 
-def order(order, sym, val):
+def order(order, sym, val, g):
     if order.lower() in ['b', 'buy']:
-        buy(sym.upper(), val)
+        buy(sym.upper(), val, g)
 
     elif order.lower() in ['s', 'sell']:
-        sell(sym.upper(), val)
-
-    global trades
-    if len(trades) > 10:
-        trades.pop()
-    trades.insert(0, str(order) + ' ' + str(sym) + ' ' + str(val))
-
-
-def buy(symbol, val):
-    quote = get_quote(symbol)
-    if not quote:
+        sell(sym.upper(), val, g)
+    else:
         return
 
-    # if val > funds:
-    #    print "insufficient funds"
-    #    return
-    if symbol not in portfolio:
-        portfolio[symbol] = float(val)/float(quote)
-    else:
-        portfolio[symbol] += float(val)/float(quote)
-    global funds
-    funds -= float(val)
+    try:
+        g.db.execute("INSERT INTO orders (trade) VALUES (?)", [str(order) + ' ' + str(sym) + ' ' + str(val)])
+        g.db.commit()
+    except:
+        return traceback.format_exc()
+
+
+def get_trades(g):
+    history = []
+    trades = g.db.execute("SELECT trade FROM orders ORDER BY ID DESC").fetchall(),
+    for trade in trades[0]:
+        history.append(trade[0])
+    return history
+
+
+def buy(sym, val, g):
+    try:
+        quote = get_quote(symbol)
+        if not quote:
+            return
+
+        g.db.execute("INSERT OR IGNORE INTO portfolio VALUES (?,?)", ['funds', 10**6])
+        g.db.commit()
+        funds = g.db.execute("SELECT sym, amount FROM portfolio WHERE sym = ?", ["funds"]).fetchall()[0][1]
+        cost = quote * float(val)
+        if funds < cost:
+            return
+        g.db.execute("INSERT OR IGNORE INTO portfolio VALUES (?,?)", [sym, 0])
+        g.db.execute("UPDATE portfolio SET amount = amount + ? WHERE sym = ?", [val, sym])
+        g.db.execute("UPDATE portfolio SET amount = ? WHERE sym = ?", [funds - cost, "funds"])
+        g.db.commit()
+    except:
+        return traceback.format_exc()
 
 
 def sell(symbol, val):
@@ -85,26 +101,39 @@ def sell(symbol, val):
         portfolio[symbol] -= float(val)/quote
 
 
-def get_portfolio_val():
+def get_portfolio(g):
+    rows = g.db.execute("SELECT sym, amount FROM portfolio where sym != ?", ['funds']).fetchall()
+    portfolio = {}
+    for sym, amount in rows:
+        portfolio[sym] = amount
+
+    return portfolio
+
+
+def get_portfolio_val(g):
+    value = 0
+    portfolio = get_portfolio(g)
+    funds = g.db.execute("SELECT sym, amount FROM portfolio WHERE sym = ?", ["funds"]).fetchall()[0][1]
+    for sym in portfolio:
+        quote = get_quote(sym)
+        value += quote * portfolio[sym]
+    update_history(value+funds, g)
+    return value + funds
+
+
+def update_history(val, g):
     try:
-        val = 0
-        for sym in portfolio:
-            quote = get_quote(sym)
-            val += quote * portfolio[sym]
-
-        global funds
-        val += funds
-        if math.fabs(val - history[0]) > 1e-09:
-            update_history(val)
-        return val
+        latest = g.db.execute("SELECT value FROM history ORDER BY ID DESC LIMIT 1").fetchone()
+        if math.fabs(val - latest[0]) > 1e-09:
+            g.db.execute("INSERT INTO history (value) VALUES (?)", [val])
+            g.db.commit()
     except:
-        print traceback.format_exc()
+        return traceback.format_exc()
 
 
-def update_history(val):
-    try:
-        if len(history) > 120:
-            history.pop()
-        history.insert(0, val)
-    except:
-        print traceback.format_exc()
+def get_history(g):
+    history = []
+    trades = g.db.execute("SELECT value, ID FROM history ORDER BY ID DESC").fetchall(),
+    for trade in trades[0]:
+        history.append(trade[0])
+    return history
