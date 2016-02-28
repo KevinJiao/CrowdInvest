@@ -83,8 +83,10 @@ def buy():
     order = request.form['order']
     sym = request.form['sym']
     val = request.form['val']
-    r = utils.order(order, sym, val, g)
-    return str(r)
+    if utils.valid_order(order, sym, val):
+        r = utils.order(order, sym, val, g)
+        return str(r)
+    return "not valid"
 
 @app.route('/status')
 def status():
