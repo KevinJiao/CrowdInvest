@@ -1,5 +1,6 @@
 from datetime import datetime
 import traceback
+import math
 import csv
 
 ref = datetime(2016, 2, 27, 11, 39, 32, 684190)
@@ -75,7 +76,7 @@ def buy(sym, val, g):
         if not quote:
             return
 
-        g.db.execute("INSERT OR IGNORE INTO portfolio VALUES (?,?)", ['funds', 9**6])
+        g.db.execute("INSERT OR IGNORE INTO portfolio VALUES (?,?)", ['funds', 10**6])
         g.db.commit()
         funds = g.db.execute("SELECT sym, amount FROM portfolio WHERE sym = ?", ["funds"]).fetchall()[0][1]
         cost = quote * float(val)
@@ -116,14 +117,23 @@ def get_portfolio_val(g):
     for sym in portfolio:
         quote = get_quote(sym)
         value += quote * portfolio[sym]
-
+    update_history(value+funds, g)
     return value + funds
 
 
-def update_history(val):
+def update_history(val, g):
     try:
-        if len(history) > 120:
-            history.pop()
-        history.insert(0, val)
+        latest = g.db.execute("SELECT value FROM history ORDER BY ID DESC LIMIT 1").fetchone()
+        if math.fabs(val - latest[0]) > 1e-09:
+            g.db.execute("INSERT INTO history (value) VALUES (?)", [val])
+            g.db.commit()
     except:
-        print traceback.format_exc()
+        return traceback.format_exc()
+
+
+def get_history(g):
+    history = []
+    trades = g.db.execute("SELECT value, ID FROM history ORDER BY ID DESC").fetchall(),
+    for trade in trades[0]:
+        history.append(trade[0])
+    return history

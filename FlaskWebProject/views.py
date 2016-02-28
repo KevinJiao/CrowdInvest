@@ -90,7 +90,7 @@ def buy():
 def status():
     value = utils.get_portfolio_val(g)
     portfolio = utils.get_portfolio(g)
-    history = utils.history
+    history = utils.get_history(g)
     trades = utils.get_trades(g)
     return jsonify(value=value, portfolio=portfolio, history=history, trades=trades)
 
