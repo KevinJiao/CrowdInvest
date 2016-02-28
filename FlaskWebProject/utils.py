@@ -81,7 +81,6 @@ def buy(sym, val, g):
         g.db.execute("INSERT OR IGNORE INTO portfolio VALUES (?,?)", [sym, 0])
         g.db.execute("UPDATE portfolio SET amount = amount + ? WHERE sym = ?", [val, sym])
         g.db.execute("UPDATE portfolio SET amount = ? WHERE sym = ?", [funds - cost, "funds"])
-        g.db.commit()
     except:
         return traceback.format_exc()
 
