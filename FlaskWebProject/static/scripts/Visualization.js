@@ -61,6 +61,8 @@ function ping(json) {
         }
     }
 
+    document.getElementById("cash").innerHTML = "$" + json["cash"];
+
     var trades = json["trades"];
     for (i = 0; i < Math.min(trades.length, 10); i++) {
       document.getElementById("recent" + i).innerHTML = trades[Math.min(trades.length, 10) - i - 1];
@@ -69,7 +71,7 @@ function ping(json) {
     var top = json["top"];
     for (i = 0; i < top.length; i++) {
       document.getElementById("tick" + i).innerHTML = top[i][0];
-      document.getElementById("hold" + i).innerHTML = top[i][1];      
+      document.getElementById("hold" + i).innerHTML = "$" + top[i][1].toFixed(2);      
     }
 
     x.domain(d3.extent(data, function(d) { return d.date; }));
