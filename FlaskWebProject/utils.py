@@ -181,4 +181,4 @@ def get_top(g):
         stocks.append((sym, value))
     stocks = sorted(stocks, key=lambda x: -x[1])
     print stocks
-    return stocks
+    return stocks[:10]
