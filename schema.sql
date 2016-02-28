@@ -8,3 +8,4 @@ create table orders (
         ID INTEGER PRIMARY KEY,
         trade TEXT not null
 );
+INSERT into portfolio VALUES('funds', 1000000);
