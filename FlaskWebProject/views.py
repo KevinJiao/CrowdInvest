@@ -118,7 +118,7 @@ def promptio():
     if len(body) == 3:
         order, sym, value = body
         utils.order(order, sym, value, g)
-        myText = "Nice! You put in an order to " + order.lower() + " $" + value + " worth of " + sym.upper()
+        myText = "Nice! You put in an order to " + order.lower() + " " + value + " shares of " + sym.upper()
         #insert JSON response here
     dat = jsonify(sendmms=False, showauthurl=False, authstate=None,
         text=myText, speech=myText, status="OK", webhookreply=None,
