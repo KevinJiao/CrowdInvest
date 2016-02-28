@@ -111,14 +111,17 @@ def get_portfolio(g):
 
 
 def get_portfolio_val(g):
-    value = 0
-    portfolio = get_portfolio(g)
-    funds = g.db.execute("SELECT sym, amount FROM portfolio WHERE sym = ?", ["funds"]).fetchall()[0][1]
-    for sym in portfolio:
-        quote = get_quote(sym)
-        value += quote * portfolio[sym]
-    update_history(value+funds, g)
-    return value + funds
+    try:
+        value = 0
+        portfolio = get_portfolio(g)
+        funds = g.db.execute("SELECT sym, amount FROM portfolio WHERE sym = ?", ["funds"]).fetchall()[0][1]
+        for sym in portfolio:
+            quote = get_quote(sym)
+            value += quote * portfolio[sym]
+        update_history(value+funds, g)
+        return value + funds
+    except:
+        return traceback.format_exc()
 
 
 def update_history(val, g):
