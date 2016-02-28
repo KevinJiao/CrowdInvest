@@ -86,7 +86,7 @@
             'UPS', 'USB', 'UTX', 'V', 'VZ', 'WAG', 'WFC', 'WMT', 'XOM']
 
 
-var owned = {};
+
   
     function loop() {
           var j;
@@ -110,6 +110,10 @@ var owned = {};
     }
 
     function ping2(json) {
+
+      function compare(a, b) {
+        return json["portfolio"][a] *  - json["portfolio"][a]
+      }
 
       for (j = 0; j < 45; j++) {
         if (json["portfolio"][markets[j]] !== undefined) {

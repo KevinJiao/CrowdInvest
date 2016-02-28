@@ -1,6 +1,6 @@
 var timeFormat = d3.time.format("%I:%M:%S");
 
-var margin = {top: 20, right: 100, bottom: 30, left: 100},
+var margin = {top: 120, right: 100, bottom: 30, left: 100},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -37,6 +37,8 @@ function loop() {
 }
 
 function ping(json) {
+
+    document.getElementById("total").innerHTML = "$" + json["value"];
 
     if (data.length == 0) {
         var history = json["history"];
