@@ -84,25 +84,18 @@
             'MRK', 'MS', 'MSFT', 'NKE', 'NOV', 'NSC', 'ORCL', 'OXY', 'PEP', 'PFE', 'PG', 'PM',
             'QCOM', 'RTN', 'SBUX', 'SLB', 'SO', 'SPG', 'T', 'TGT', 'TWX', 'TXN', 'UNH', 'UNP',
             'UPS', 'USB', 'UTX', 'V', 'VZ', 'WAG', 'WFC', 'WMT', 'XOM']
-  
-  var dict = {};
-  var change = {}
-  var temp;
 
 
+var owned = {};
   
     function loop() {
           var j;
-          for(j = 0; j < markets.length; j++)
+          $.getJSON( "http://localhost:5555/status", ping2);
+          for(j = 0; j < 45; j++)
             {
               var link = "http://localhost:5555/quote?s=";
               link += markets[j];
               $.getJSON( link, ping);
-              
-              change[markets[j]] = dict[markets[j]] - temp;
-              dict[markets[j]] = temp;
-              
-
             }
          setTimeout(loop, 15000);
     }
@@ -111,10 +104,23 @@
     
     function ping(json) {
       
-      document.getElementById(markets[j]).innerHTML = "$" + json["price"];
+      document.getElementById(json["sym"]).innerHTML = "$" + json["price"].toFixed(2);
 
       
     }
+
+    function ping2(json) {
+
+      for (j = 0; j < 45; j++) {
+        if (markets[j] in json["portfolio"]) {
+          document.getElementById("num" + markets[j]).innerHTML = "$" + json["portfolio"][markets[j]].toFixed(2);        
+        } else {
+          document.getElementById("num" + markets[j]).innerHTML = "$0";        
+        }
+      }
+    }
+
+    loop();
     
     </script>
     <div class="container">
@@ -129,11 +135,11 @@
         html += '<button type="button" class="btn btn-primary  btn-outline">'; 
         html += markets[i];
         html += '</button>';
-        html += '<button type="button" class="btn btn-info  btn-outline">';
-        html += 'Shares Owned';
+        html += '<button type="button" class="btn btn-info  btn-outline" id=num' + markets[i] + '>';
         html += '</button>';
-        html += '<button type="button" class="btn btn-default  btn-outline" >';
-        html += dict[markets[i]]
+        html += '<button type="button" class="btn btn-default  btn-outline" id =';
+        html += markets[i];
+        html += '>';
         html += '</button>';
         html += '<br> <br>';
       }
@@ -148,13 +154,13 @@
       var i;
       for (i = 15; i < 30; i++) { 
         html += '<button type="button" class="btn btn-primary btn-outline">'; 
-        html += 'Symbol';
+        html += markets[i];
         html += '</button>';
-        html += '<button type="button" class="btn btn-info btn-outline">';
-        html += 'Shares Owned';
+        html += '<button type="button" class="btn btn-info btn-outline" id=num' + markets[i] + '>';
         html += '</button>';
-        html += '<button type="button" class="btn btn-default btn-outline">';
-        html += 'Price Per Share';
+        html += '<button type="button" class="btn btn-default btn-outline" id = ';
+        html += markets[i];
+        html += '>';
         html += '</button>';
         html += '<br> <br>';
       }
@@ -169,13 +175,13 @@
       var i;
       for (i = 30; i < 45; i++) { 
         html += '<button type="button" class="btn btn-primary btn-outline">'; 
-        html += 'Symbol';
+        html += markets[i];
         html += '</button>';
-        html += '<button type="button" class="btn btn-info btn-outline">';
-        html += 'Shares Owned';
+        html += '<button type="button" class="btn btn-info btn-outline" id=num' + markets[i] + '>';
         html += '</button>';
-        html += '<button type="button" class="btn btn-default btn-outline">';
-        html += 'Price Per Share';
+        html += '<button type="button" class="btn btn-default btn-outline" id = ';        
+        html += markets[i];
+        html += '>';
         html += '</button>';
         html += '<br> <br>';
       }
