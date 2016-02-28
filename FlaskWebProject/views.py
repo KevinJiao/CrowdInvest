@@ -107,14 +107,13 @@ def twilio():
 
 @app.route('/promptio', methods=['POST'])
 def promptio():
-    try:
-        print("received promptio")
-        myJson = request.get_json()
-        body = myJson['message'].split(" ")
-        if len(body) == 3:
-            order, sym, value = body
-            utils.order(order, sym, value)
-            #insert JSON response here
-        return jsonify(sendmms=False, showauthurl=False, authstate=False, text="hi", speech="hi",status="OK") #insert json responses here
-    except:
-        return jsonify(traceback.print_exc())
+    print("received promptio")
+    myJson = request.get_json()
+    body = myJson['message'].split(" ")
+    if len(body) == 3:
+        order, sym, value = body
+        utils.order(order, sym, value)
+        #insert JSON response here
+    return jsonify(sendmms=False, showauthurl=False, authstate=None,
+    text="hi", speech="hi", status="OK", webhookreply=None,
+    images=[{"imageurl":None, "alttext":"hi there"}]) #insert json responses here
