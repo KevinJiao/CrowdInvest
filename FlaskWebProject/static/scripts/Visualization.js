@@ -66,9 +66,11 @@ function ping(json) {
       document.getElementById("recent" + i).innerHTML = trades[Math.min(trades.length, 10) - i - 1];
     }
 
-    var portfolio = json["portfolio"];
-    document.getElementById("tick0").innerHTML = "AAPL";
-    document.getElementById("hold0").innerHTML = portfolio["AAPL"];
+    var top = json["top"];
+    for (i = 0; i < top.length; i++) {
+      document.getElementById("tick" + i).innerHTML = top[i][0];
+      document.getElementById("hold" + i).innerHTML = top[i][1];      
+    }
 
     x.domain(d3.extent(data, function(d) { return d.date; }));
 

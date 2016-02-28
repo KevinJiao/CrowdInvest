@@ -91,7 +91,9 @@ def status():
     portfolio = utils.get_portfolio(g)
     history = utils.get_history(g)
     trades = utils.get_trades(g)
-    return jsonify(value=value, portfolio=portfolio, history=history, trades=trades)
+    top = utils.get_top(g)
+    cash = g.db.execute("SELECT sym, amount FROM portfolio WHERE sym = ?", ["funds"]).fetchall()[0][1]
+    return jsonify(cash=cash, value=value, portfolio=portfolio, history=history, trades=trades, top=top)
 
 @app.route('/twilio', methods=['POST', 'GET'])
 def twilio():
@@ -110,6 +112,5 @@ def promptio():
     if len(body) == 3:
         order, sym, value = body
         utils.order(order, sym, value)
-        return
-    #consider adding more to this. promptio can give feedback
-    return
+        #insert JSON response here
+    return jsonify(sendmms=False, showauthurl=False, authstate=False, text="hi", speech="hi",status="OK") #insert json responses here

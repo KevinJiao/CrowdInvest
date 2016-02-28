@@ -3,7 +3,7 @@ import traceback
 import math
 import csv
 
-ref = datetime(2016, 2, 27, 11, 39, 32, 684190)
+ref = datetime(2016, 2, 27, 22, 20, 17, 410706)
 markets = ['F_AD', 'F_BO', 'F_BP', 'F_C', 'F_CC', 'F_CD',
            'F_CL', 'F_CT', 'F_DX', 'F_EC', 'F_ED', 'F_ES', 'F_FC', 'F_FV', 'F_GC',
            'F_HG', 'F_HO', 'F_JY', 'F_KC', 'F_LB', 'F_LC', 'F_LN', 'F_MD', 'F_MP',
@@ -73,7 +73,7 @@ def buy(sym, val, g):
     try:
         quote = get_quote(symbol)
         if not quote:
-            return
+            return quote
 
         g.db.execute("INSERT OR IGNORE INTO portfolio VALUES (?,?)", ['funds', 10**6])
         funds = g.db.execute("SELECT sym, amount FROM portfolio WHERE sym = ?", ["funds"]).fetchall()[0][1]
@@ -134,7 +134,19 @@ def update_history(val, g):
 
 def get_history(g):
     history = []
-    trades = g.db.execute("SELECT value, ID FROM history ORDER BY ID DESC").fetchall(),
+    trades = g.db.execute("SELECT value, ID FROM history ORDER BY ID DESC LIMIT 120").fetchall(),
     for trade in trades[0]:
         history.append(trade[0])
     return history
+
+
+def get_top(g):
+    stocks = []
+    portfolio = get_portfolio(g)
+    for sym in portfolio:
+        quote = get_quote(sym)
+        value = quote * portfolio[sym]
+        stocks.append((sym, value))
+    stocks = sorted(stocks, key=lambda x: -x[1])
+    print stocks
+    return stocks
