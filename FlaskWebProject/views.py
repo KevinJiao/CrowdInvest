@@ -73,7 +73,8 @@ def status():
     value = utils.get_portfolio_val()
     portfolio = utils.portfolio
     history = utils.history
-    return jsonify(value=value, portfolio=portfolio, history=history)
+    trades = utils.trades
+    return jsonify(value=value, portfolio=portfolio, history=history, trades=trades)
 
 
 @app.route('/twilio', methods=['POST', 'GET'])

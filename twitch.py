@@ -2,7 +2,6 @@ import socket
 import requests
 
 settings = []
-commands = []
 readbuffer = ""
 
 HOST = "irc.twitch.tv"
@@ -18,6 +17,8 @@ while True:
     s.send(bytes("NICK %s\r\n" % NICK, "UTF-8"))
     s.send(bytes("USER %s %s bla :%s\r\n" % (NICK, HOST, NICK), "UTF-8"))
     s.send(bytes("JOIN #%s\r\n" % CHAT_CHANNEL, "UTF-8"))
+    s.send(bytes("PRIVMSG #%s :Connected\r\n" % CHAT_CHANNEL, "UTF-8"))
+
     while 1:
         readbuffer = readbuffer+s.recv(1024).decode("UTF-8", errors="ignore")
         temp = str.split(readbuffer, "\n")
@@ -51,14 +52,17 @@ while True:
             elif user == ":%s.tmi.twitch.tv: " % NICK:
                 pass
             else:
-                out = out.split(' ')
-                if len(out) == 3:
-                    order, sym, val = out
+                trade = out.split(' ')
+                if len(trade) == 3:
+                    order, sym, val = trade
                     res = requests.post("http://localhost:5555/order", data={
+                        "order": order,
+                        "sym": sym,
+                        "val": val})
+                    res = requests.post("http://crowdinvestor.azurewebsites.net/order", data={
                         "order": order,
                         "sym": sym,
                         "val": val})
                     print(res)
             with open("commands.txt", "w") as f:
-                for item in commands:
-                    f.write(item + '\n')
+                    f.write(out + '\n')
