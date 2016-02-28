@@ -1,10 +1,8 @@
 """
 This script runs the FlaskWebProject application using a development server.
 """
-import gc
 from os import environ
 from FlaskWebProject import app
-gc.disable()
 
 if __name__ == '__main__':
     HOST = environ.get('SERVER_HOST', 'localhost')
