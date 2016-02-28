@@ -113,4 +113,6 @@ def promptio():
         order, sym, value = body
         utils.order(order, sym, value)
         #insert JSON response here
-    return jsonify(sendmms=False, showauthurl=False, authstate=False, text="hi", speech="hi",status="OK") #insert json responses here
+    return jsonify(sendmms=False, showauthurl=False, authstate=None,
+    text="hi", speech="hi", status="OK", webhookreply=None, 
+    images={imageurl:None, alttext:"hi there"}) #insert json responses here
