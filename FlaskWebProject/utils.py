@@ -134,7 +134,7 @@ def update_history(val, g):
 
 def get_history(g):
     history = []
-    trades = g.db.execute("SELECT value, ID FROM history ORDER BY ID DESC").fetchall(),
+    trades = g.db.execute("SELECT value, ID FROM history ORDER BY ID DESC LIMIT 120").fetchall(),
     for trade in trades[0]:
         history.append(trade[0])
     return history
