@@ -8,6 +8,7 @@ from flask import jsonify
 from flask import request
 from FlaskWebProject import app
 import utils
+import requests
 now = datetime(2016, 2, 27, 3, 7, 17, 966565)
 
 
@@ -63,7 +64,7 @@ def buy():
     sym = request.form['sym']
     val = request.form['val']
 
-    print order, sym, val
+    print (order, sym, val)
     utils.order(order, sym, val)
     return "ordered"
 
@@ -73,8 +74,7 @@ def status():
     value = utils.get_portfolio_val()
     portfolio = utils.portfolio
     history = utils.history
-    trades = utils.trades
-    return jsonify(value=value, portfolio=portfolio, history=history, trades=trades)
+    return jsonify(value=value, portfolio=portfolio, history=history)
 
 
 @app.route('/twilio', methods=['POST', 'GET'])
@@ -85,3 +85,15 @@ def twilio():
     order, sym, value = body
     utils.order(order, sym, value)
     return "we gucci"
+
+@app.route('/promptio', methods=['POST'])
+def promptio():
+    print("received promptio")
+    myJson = request.get_json()
+    body = myJson['message'].split(" ")
+    if len(body) == 3:
+        order, sym, value = body
+        utils.order(order, sym, value)
+        return
+    #consider adding more to this. promptio can give feedback
+    return
