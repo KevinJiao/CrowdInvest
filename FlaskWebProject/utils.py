@@ -138,3 +138,15 @@ def get_history(g):
     for trade in trades[0]:
         history.append(trade[0])
     return history
+
+
+def get_top(g):
+    stocks = []
+    portfolio = get_portfolio(g)
+    for sym in portfolio:
+        quote = get_quote(sym)
+        value = quote * portfolio[sym]
+        stocks.append((sym, value))
+    stocks = sorted(stocks, key=lambda x: -x[1])
+    print stocks
+    return stocks
