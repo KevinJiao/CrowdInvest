@@ -3,7 +3,7 @@ import traceback
 import math
 import csv
 
-ref = datetime(2016, 2, 27, 22, 20, 17, 410706)
+ref = datetime(2016, 2, 28, 6, 25, 45, 970844)
 markets = ['F_AD', 'F_BO', 'F_BP', 'F_C', 'F_CC', 'F_CD',
            'F_CL', 'F_CT', 'F_DX', 'F_EC', 'F_ED', 'F_ES', 'F_FC', 'F_FV', 'F_GC',
            'F_HG', 'F_HO', 'F_JY', 'F_KC', 'F_LB', 'F_LC', 'F_LN', 'F_MD', 'F_MP',
