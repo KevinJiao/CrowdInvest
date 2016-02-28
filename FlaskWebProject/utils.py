@@ -77,11 +77,8 @@ def buy(sym, val, g):
             return
 
         g.db.execute("INSERT OR IGNORE INTO portfolio VALUES (?,?)", ['funds', 10**6])
-        g.db.commit()
         funds = g.db.execute("SELECT sym, amount FROM portfolio WHERE sym = ?", ["funds"]).fetchall()[0][1]
         cost = quote * float(val)
-        if float(funds) < cost:
-            return
         g.db.execute("INSERT OR IGNORE INTO portfolio VALUES (?,?)", [sym, 0])
         g.db.execute("UPDATE portfolio SET amount = amount + ? WHERE sym = ?", [val, sym])
         g.db.execute("UPDATE portfolio SET amount = ? WHERE sym = ?", [funds - cost, "funds"])
